@@ -1,7 +1,5 @@
 'use client'
 
-import EditDestinationForm from "../../_components/destination"
-
 
 export default function EditDestination({ params }: { params: { id: string }}) {
 
@@ -10,7 +8,7 @@ export default function EditDestination({ params }: { params: { id: string }}) {
       <div className="flex items-center">
         <h1 className="font-semibold text-lg md:text-2xl">Editar destino</h1>
       </div>
-      <EditDestinationForm />
+      {/* <EditDestinationForm /> */}
     </main>
   )
 }

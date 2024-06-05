@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 27.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 61.3" style="enable-background:new 0 0 512 61.3;" xml:space="preserve">
+<style type="text/css">
+	.Arched_x0020_Green{fill:url(#SVGID_1_);stroke:#FFFFFF;stroke-width:0.25;stroke-miterlimit:1;}
+	.st0{fill:#ED1C24;}
+	.st1{clip-path:url(#SVGID_00000135663411485691310520000017584839278680516237_);}
+	
+		.st2{clip-path:url(#SVGID_00000018194901473245563300000005935960527508413848_);fill:url(#SVGID_00000132809083980583805040000006783391247948202919_);}
+	.st3{fill:#002157;}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-41.6401" y1="328.2766" x2="-40.933" y2="327.5695">
+	<stop  offset="0" style="stop-color:#20AC4B"/>
+	<stop  offset="0.9831" style="stop-color:#19361A"/>
+</linearGradient>
+<g>
+	<path class="st0" d="M479.8,9.5l-22.5,32.5c-3,4.3-7.8,8.4-13.5,8.8v1h25c6.6,0,11.5-4.3,14.7-9.1l23.1-33.2H479.8z"/>
+	<g>
+		<g>
+			<defs>
+				<rect id="SVGID_00000005227229435169135080000013093767697730789010_" x="443.8" y="9.5" width="62.8" height="42.3"/>
+			</defs>
+			<clipPath id="SVGID_00000001665441599955633790000012604803841045972379_">
+				<use xlink:href="#SVGID_00000005227229435169135080000013093767697730789010_"  style="overflow:visible;"/>
+			</clipPath>
+			<g style="clip-path:url(#SVGID_00000001665441599955633790000012604803841045972379_);">
+				<defs>
+					<path id="SVGID_00000175315310652148485640000000768051273338408611_" d="M479.8,9.5l-22.5,32.5c-3,4.3-7.8,8.4-13.6,8.8v1h25
+						c6.6,0,11.5-4.3,14.7-9.1l23.1-33.2H479.8z"/>
+				</defs>
+				<clipPath id="SVGID_00000062171555735090475340000011343232217804643462_">
+					<use xlink:href="#SVGID_00000175315310652148485640000000768051273338408611_"  style="overflow:visible;"/>
+				</clipPath>
+				
+					<linearGradient id="SVGID_00000168095720043645527550000011955300864693284513_" gradientUnits="userSpaceOnUse" x1="-40.5375" y1="467.1307" x2="-38.2568" y2="467.1307" gradientTransform="matrix(0 18.5557 18.5557 0 -8192.7939 761.6578)">
+					<stop  offset="0" style="stop-color:#FFFFFF"/>
+					<stop  offset="0.3352" style="stop-color:#FFFFFF"/>
+					<stop  offset="0.4812" style="stop-color:#FAFAFB"/>
+					<stop  offset="0.5922" style="stop-color:#F1F2F2"/>
+					<stop  offset="0.6915" style="stop-color:#E3E4E5"/>
+					<stop  offset="0.7841" style="stop-color:#D0D2D4"/>
+					<stop  offset="0.8719" style="stop-color:#B8BABC"/>
+					<stop  offset="0.9551" style="stop-color:#9B9DA0"/>
+					<stop  offset="1" style="stop-color:#8A8C8E"/>
+				</linearGradient>
+				
+					<rect x="443.8" y="9.5" style="clip-path:url(#SVGID_00000062171555735090475340000011343232217804643462_);fill:url(#SVGID_00000168095720043645527550000011955300864693284513_);" width="62.8" height="42.3"/>
+			</g>
+		</g>
+	</g>
+	<path class="st3" d="M66.1,13h11.3v38.8H66.1V13z M326.9,51.8l-27.2-23v23h-9.5V13h8.1l26.8,22.7V13h9.5v38.8H326.9z M386,25.5
+		c-5.1-2.5-10.9-4.6-18.5-4.6c-9.1,0-15.9,4.7-15.9,11.3c0,6.7,6.9,11.5,15.8,11.5c7.4,0,13.2-1.9,18.9-5.2v9.6
+		c-5.1,2.5-11.8,4.4-19.4,4.4c-15.5,0-27.7-7.9-27.7-20.3c0-12.1,12.4-19.9,27.7-19.9c7.2,0,13.7,1.4,19.1,3.6V25.5z M140.4,51.8V13
+		h37.8v8.3h-26.5V31h25.9v8.3h-25.9v12.5H140.4z M392.9,51.8V13h39.2v8.3h-27.9V28h27.5v8.3h-27.5v7.1H432v8.3H392.9z M217.5,37.2
+		l15.6,14.5H221c-2.7,0-4.4-0.8-5.8-2.2l-10.6-10.3c-0.2-0.2-0.5-0.3-0.9-0.3h-7.2v12.8h-11.3V13h24.5c12.7,0,18.1,5.7,18.1,12
+		C227.6,32.4,221.1,35.9,217.5,37.2 M208.4,30.8c4.5,0,6.6-2.3,6.6-4.8c0-2.6-1.9-4.7-6.6-4.7h-12v9.5H208.4z M120.4,37.2L136,51.8
+		H124c-2.7,0-4.4-0.8-5.8-2.2l-10.6-10.3c-0.2-0.2-0.5-0.3-0.9-0.3h-7.2v12.8H88V13h24.5c12.7,0,18.1,5.7,18.1,12
+		C130.6,32.4,124,35.9,120.4,37.2 M111.4,30.8c4.5,0,6.6-2.3,6.6-4.8c0-2.6-1.9-4.7-6.6-4.7h-12v9.5H111.4z M48.4,51.8l-5-8.5H21.8
+		l-4.5,8.5H6.5l21.6-38.7h9.8l24.5,38.7H48.4z M26.2,35.2h12.6l-6.6-11.8L26.2,35.2z M274.2,51.8l-4.8-8.5h-21.1l-4.4,8.5h-10.5
+		l21-38.7h9.5l23.8,38.7H274.2z M252.5,35.2h12.3l-6.4-11.8L252.5,35.2z"/>
+</g>
+</svg>

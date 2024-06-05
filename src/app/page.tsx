@@ -1,113 +1,152 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button"
 
-export default function Home() {
+import Header from "./_components/Header"
+import { HeroHeader } from "./_components/HeroHeader"
+import { Testemonials } from "./_components/Testemonials"
+import Accordion from "./_components/AccordionFAQ"
+import { Companies } from "./_components/Companies"
+import Link from "next/link"
+
+import { Plane, Send, Tag } from "lucide-react"
+import Footer from "./_components/Footer"
+
+import { getHeroHeader } from './actions'
+
+
+export default async function Home() {
+  const destinations = await getHeroHeader()
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <>
+      <Header />
+      <main className="w-full">
+        <section className="py-10 bg-white">
+          <div className="container md:flex justify-between items-end mb-10">
+            <div>
+              <span className="font-semibold">last updates</span>
+              <h1 className="text-5xl text-sky-950 font-bold mb-6">Choose your flight</h1>
+              <p className="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi necessitatibus hic, vitae voluptatem quaerat exercitationem.</p>
+            </div>
+            <Button variant="cta" size="lg"><Link href="/destinations">View All Destinations</Link></Button>
+          </div>
+          <HeroHeader data={destinations}/>
+        </section>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+        <section className="py-10 bg-[#FFFEEE]">
+          <div className="container">
+            <h2 className="text-4xl text-sky-950 text-center font-bold mb-6">You might be interested</h2>
+            <p className="text-center mb-10">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia, perspiciatis.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              <article className="w-full rounded-xl border-2 border-slate-900" style={{backgroundImage: "url(https://source.unsplash.com/random/1050x312?sig=1)", backgroundSize: "cover", backgroundPosition: "center", }}>
+                <div className="bg-zinc-800/70 p-4 rounded-lg">
+                  <h3 className="text-2xl font-bold text-slate-50">Destination</h3>
+                  <p className="text-slate-300">Additional information</p>
+                  <p className="text-slate-300 font-semibold mb-4">U$ 299.00</p>
+                  <Button variant="cta">Buy</Button>
+                </div>
+              </article>
+              <article className="w-full rounded-xl border-2 border-slate-900" style={{backgroundImage: "url(https://source.unsplash.com/random/1050x312?sig=2)", backgroundSize: "cover", backgroundPosition: "center", }}>
+                <div className="bg-zinc-800/70 p-4 rounded-lg">
+                  <h3 className="text-2xl font-bold text-slate-50">Destination</h3>
+                  <p className="text-slate-300">Additional information</p>
+                  <p className="text-slate-300 font-semibold mb-4">U$ 299.00</p>
+                  <Button variant="cta">Buy</Button>
+                </div>
+              </article>
+              <article className="w-full rounded-xl border-2 border-slate-900" style={{backgroundImage: "url(https://source.unsplash.com/random/1050x312?sig=3)", backgroundSize: "cover", backgroundPosition: "center", }}>
+                <div className="bg-zinc-800/70 p-4 rounded-lg">
+                  <h3 className="text-2xl font-bold text-slate-50">Destination</h3>
+                  <p className="text-slate-300">Additional information</p>
+                  <p className="text-slate-300 font-semibold mb-4">U$ 299.00</p>
+                  <Button variant="cta">Buy</Button>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+        <section className="py-10 bg-[#7ABED5] flex flex-col items-start justify-center lg:bg-about-us-main bg-contain bg-no-repeat bg-right min-h-[500px]">
+          <div className="container">
+            <div className="w-full md:w-1/2">
+              <h2 className="text-4xl text-sky-950 font-bold mb-6">Who we are?</h2>
+              <p className="mb-4 text-sky-800">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore ad rerum officia cumque id laborum earum voluptatem facere blanditiis, nam porro deleniti debitis sequi? Porro laborum, sint ducimus harum repellendus dolore perferendis mollitia dolorem nihil repudiandae nesciunt incidunt necessitatibus ipsa expedita quos tenetur quasi sit tempore at modi explicabo pariatur.</p>
+              <Link href="/about"><Button variant="outline">About us</Button></Link>
+            </div>
+          </div>
+        </section>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+        <section className="py-10 bg-[#FFFEEE]">
+          <div className="container">
+            <h2 className="text-lg text-center text-sky-950 font-bold mb-6">Most used airlines in the world</h2>
+          </div>
+          <Companies />
+        </section>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
+        <section className="bg-sky-950 py-10">
+          <div className="container">
+            <h2 className="text-4xl text-center text-slate-50 font-bold mb-10">How Fly Top works?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              <div className="bg-sky-100 space-y-4 p-5 rounded-xl border-2 border-sky-300 shadow-xl">
+                <Send className="size-12 mx-auto text-primary"/>
+                <h3 className="text-2xl text-sky-950 text-center font-bold">Send a message</h3>
+                <p className="text-center">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis quam, nam labore corrupti eos voluptas! Quisquam reiciendis velit, unde autem ullam ratione numquam natus quidem.</p>
+              </div>
+              <div className="bg-sky-100 space-y-4 p-5 rounded-xl border-2 border-sky-300 shadow-xl">
+                <Tag className="size-12 mx-auto text-primary"/>
+                <h3 className="text-2xl text-sky-950 text-center font-bold">When the price drops, you will know!</h3>
+                <p className="text-center">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis quam, nam labore corrupti eos voluptas! Quisquam reiciendis velit, unde autem ullam ratione numquam natus quidem.</p>
+              </div>
+              <div className="bg-sky-100 space-y-4 p-5 rounded-xl border-2 border-sky-300 shadow-xl">
+                <Plane className="size-12 mx-auto text-primary"/>
+                <h3 className="text-2xl text-sky-950 text-center font-bold">Your flight is issued immediately.</h3>
+                <p className="text-center">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis quam, nam labore corrupti eos voluptas! Quisquam reiciendis velit, unde autem ullam ratione numquam natus quidem.</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+        <section className="py-10 bg-[#FFFEEE]">
+          <div className="md:container">
+            <Testemonials />
+          </div>
+        </section>
+
+        <section className="bg-primary text-slate-50 py-10">
+          <div className="container md:grid md:grid-cols-2">
+            <h2 className="text-4xl font-bold mb-6">Último CTA da página</h2>
+            <div>
+              <p className="text-slate-200 mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem distinctio porro soluta aliquam minima nesciunt quisquam voluptas architecto atque iure.</p>
+              <Button variant="cta">Click here</Button>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-[#FFFEEE]">
+          <div className="container md:grid md:grid-cols-2 md:gap-10">
+            <div>
+              <h2 className="text-4xl font-bold mb-6">FAQs</h2>
+              <p className="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, recusandae. Explicabo excepturi quisquam officia velit?</p>
+              <Button>Contact</Button>
+            </div>
+            <div className="mt-10 md:m-0">
+              <Accordion
+                question="Lorem 1?"
+                answer="Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni pariatur, blanditiis quisquam quam voluptates nulla architecto officiis quis minus aut natus, quas expedita saepe laborum."
+                open
+              />
+              <Accordion
+                question="Lorem 2?"
+                answer="Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni pariatur, blanditiis quisquam quam voluptates nulla architecto officiis quis minus aut natus, quas expedita saepe laborum."
+              />
+              <Accordion
+                question="Lorem 3?"
+                answer="Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni pariatur, blanditiis quisquam quam voluptates nulla architecto officiis quis minus aut natus, quas expedita saepe laborum."
+              />
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  )
 }

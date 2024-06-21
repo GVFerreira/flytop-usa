@@ -1,14 +1,13 @@
 'use client'
 
+import { ArrowBigLeft } from 'lucide-react'
 // @ts-ignore
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll'
 import '@splidejs/react-splide/css'
-import { ArrowBigLeft } from 'lucide-react'
 import Image from 'next/image'
-import { Destination } from '../types'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { Destination } from '../types'
 
 type DestinationDataTable = {
   data: Destination[]

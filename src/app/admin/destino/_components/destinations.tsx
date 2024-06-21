@@ -26,7 +26,7 @@ export default async function Destinations() {
           <TableRow key={index}>
             <TableCell>
               <Image
-                src={`https://source.unsplash.com/random/1080x1080?sig=${index}`}
+                src={destination.imagePath}
                 className="aspect-square rounded-md object-cover"
                 height="64"
                 width="64"
@@ -34,9 +34,9 @@ export default async function Destinations() {
               />
             </TableCell>
             <TableCell className="font-medium">{destination.name}</TableCell>
-            <TableCell className="hidden md:table-cell">{destination.value}</TableCell>
-            <TableCell>{destination.flight_stopover ? destination.airport_stopover  : "Não"}</TableCell>
-            <TableCell className="hidden md:table-cell">{new Date(destination.departure_date).toDateString()} | {new Date(destination.return_date).toDateString()}</TableCell>
+            <TableCell className="hidden md:table-cell">{destination.price}</TableCell>
+            <TableCell>{destination.flightStopover ? destination.airportStopover  : "Não"}</TableCell>
+            <TableCell className="hidden md:table-cell">{new Date(destination.departureDates).toDateString()} | {new Date(destination.returnDates).toDateString()}</TableCell>
             <TableCell>
               <a href={`/admin/destino/${destination.id}/edit`} className="flex bg-yellow-500 rounded-full size-10"><Pencil className="size-4 m-auto"/></a>
             </TableCell>

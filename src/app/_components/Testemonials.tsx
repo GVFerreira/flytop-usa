@@ -3,7 +3,7 @@
 // @ts-ignore
 import { Splide, SplideSlide, SplideTrack } from '@splidejs/react-splide'
 import '@splidejs/react-splide/css'
-import { ArrowBigLeft, Star, StarHalf } from 'lucide-react'
+import { Star } from 'lucide-react'
 import Image from 'next/image'
 import Logotipo from './Logotipo'
 

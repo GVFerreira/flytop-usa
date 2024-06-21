@@ -7,8 +7,8 @@ export default async function About() {
     <>
       <Header />
       <main style={{flex: "1 1 0"}}>
-        <section className="py-16 bg-white">
-          <div className="container mb-10">
+        <section className="md:mx-auto md:container md:grid md:grid-cols-2 md:space-x-8 py-16 bg-white">
+          <div className="mb-10">
             <h1 className="text-5xl text-sky-950 text-center font-bold leading-[4rem] mb-6">
               Travel agency specializing<br/>
               in <span className="text-primary uppercase">business class</span>.
@@ -16,7 +16,7 @@ export default async function About() {
             <p className="text-center max-w-[500px] mx-auto mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi necessitatibus hic, vitae voluptatem quaerat exercitationem.</p>
           </div>
           <Image
-          className="w-full border-y-2 border-slate-900"
+          className="w-full md:mx-auto md:rounded-xl md:border-2 border-y-2 border-slate-900"
             src="/business-class.jpg"
             alt="Airplane photo"
             width={390}

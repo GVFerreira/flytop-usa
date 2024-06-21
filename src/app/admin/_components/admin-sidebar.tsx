@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from "next/image"
-import { Home, PlaneLanding, Tag, User } from 'lucide-react'
+import { Home, PlaneLanding, Send, Tag, User } from 'lucide-react'
 
 export async function AdminSidebar() {
   const pathname = usePathname()
@@ -28,28 +28,35 @@ export async function AdminSidebar() {
         <div className="flex-1 overflow-auto py-2">
           <nav className="grid items-start px-4 text-sm font-medium">
             <Link
-              className={`flex items-center gap-3 rounded-lg ${ isActive('/admin') ? 'bg-gray-100' : '' } px-3 py-2 text-gray-900 transition-all hover:text-gray-900`}
+              className={`flex items-center gap-3 rounded-lg ${ isActive('/admin') ? 'bg-gray-100 text-gray-900' : 'text-gray-500' } px-3 py-2  transition-all hover:text-gray-900`}
               href="/admin"
             >
               <Home className="size-4" />
               Início
             </Link>
             <Link
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/destino') ? 'bg-gray-100' : '' } text-gray-500 transition-all hover:text-gray-900`}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/destino') ? 'bg-gray-100 text-gray-900' : 'text-gray-500' } text-gray-500 transition-all hover:text-gray-900`}
               href="/admin/destino"
             >
               <PlaneLanding className="size-4" />
               Destinos
             </Link>
             <Link
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/categoria') ? 'bg-gray-100' : '' } text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50`}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/companhia') ? 'bg-gray-100 text-gray-900' : 'text-gray-500' } text-gray-500 transition-all hover:text-gray-900`}
+              href="/admin/companhia"
+            >
+              <Send className="size-4" />
+              Companhias aéreas
+            </Link>
+            <Link
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/categoria') ? 'bg-gray-100 text-gray-900' : 'text-gray-500' } text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50`}
               href="/admin/categoria"
             >
               <Tag className="size-4" />
               Categorias
             </Link>
             <Link
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/usuario') ? 'bg-gray-100' : '' } text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50`}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/usuario') ? 'bg-gray-100 text-gray-900' : 'text-gray-500' } text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50`}
               href="/admin/usuario"
             >
               <User className="size-4" />

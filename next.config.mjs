@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/random/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'flytop-minio.wzryfz.easypanel.host',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 }

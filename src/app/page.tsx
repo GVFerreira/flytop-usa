@@ -21,11 +21,11 @@ export default async function Home() {
       <Header />
       <main className="w-full">
         <section className="py-10 bg-white">
-          <div className="container md:flex justify-between items-end mb-10">
+          <div className="container md:flex md:justify-between md:items-end md:space-x-10 mb-10">
             <div>
-              <span className="font-semibold">last updates</span>
-              <h1 className="text-5xl text-sky-950 font-bold mb-6">Choose your flight</h1>
-              <p className="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi necessitatibus hic, vitae voluptatem quaerat exercitationem.</p>
+              <span className="font-semibold">Choose your flight</span>
+              <h1 className="text-7xl text-sky-950 font-bold mb-6">We connect successful people to the best flights in the world</h1>
+              <p className="mb-4 mr-20">Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias repellat natus, voluptas magni dolorem reprehenderit itaque quae quaerat eligendi unde praesentium pariatur dignissimos veritatis? Et alias cumque nesciunt quod maxime!</p>
             </div>
             <Button variant="cta" size="lg"><Link href="/destinations">View All Destinations</Link></Button>
           </div>
@@ -75,7 +75,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-10 bg-[#FFFEEE]">
+        <section className="py-10 bg-white">
           <div className="container">
             <h2 className="text-lg text-center text-sky-950 font-bold mb-6">Most used airlines in the world</h2>
           </div>
@@ -105,7 +105,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-10 bg-[#FFFEEE]">
+        <section className="py-10 bg-white">
           <div className="md:container">
             <Testemonials />
           </div>

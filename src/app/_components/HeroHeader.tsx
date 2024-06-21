@@ -8,6 +8,7 @@ import { ArrowBigLeft } from 'lucide-react'
 import Image from 'next/image'
 import { Destination } from '../types'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 type DestinationDataTable = {
   data: Destination[]
@@ -21,6 +22,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
     pagination: true,
     arrows: false,
     resetProgress: false,
+    gap: 32,
     autoScroll: {
       speed: 0.3
     },
@@ -32,6 +34,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
         perPage: 2
       },
       600: {
+        gap: 16,
         perPage: 1
       },
     }
@@ -43,14 +46,36 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
           {
             data.map((destination, index) => (
               <SplideSlide key={index}>
-                <div className="px-2 mb-10 transition-all duration-300 ease-in hover:mt-4 hover:cursor-pointer">
-                  <Link href={`/${destination.id}/destination`}>
-                    <Image src={`https://source.unsplash.com/random/512x512?${destination.name + ' tourist attraction'}?sig=${ index }`} alt={`Image ${index}`} className="w-full mb-4 rounded-xl border-2 border-slate-900" width={512} height={512}/>
-                    <h3 className="text-3xl font-bold text-sky-950">{destination.name} <span className="font-normal text-base">({destination.destination_airport})</span></h3>
-                    <p className="text-lg">{destination.flight_company}</p>
-                    <p className="text-lg font-semibold">U$ {destination.value}</p>
-                  </Link>
-                </div>
+                <Link href={`/${destination.id}/destination`}>
+                  <div className="bg-[#FFFEEE] rounded-3xl p-6 mb-10 transition-all duration-300 ease-in hover:mt-4 hover:cursor-pointer">
+                    <div className="mb-8">
+                      <Image
+                        src={destination.imagePath}
+                        alt={`Image ${index}`}
+                        width={512} 
+                        height={512}
+                        className="w-full aspect-square object-cover mb-4 rounded-xl border-2 border-slate-900"
+                      />
+                      <div className="relative">
+                        <p
+                          className="absolute bottom-2 left-3 space-x-4"
+                        >
+                          <span className="rounded-full text-sm px-4 py-2 text-slate-950 bg-green-400 font-bold border border-slate-950">
+                            From U$ {(destination.price).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                          </span>
+                          <span className="rounded-full text-xs line-through px-4 py-2 text-slate-950 bg-white font-bold border border-slate-950">
+                            {(destination.regularPrice).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                      <h3 className="text-3xl font-bold text-sky-950">
+                        {destination.name}
+                        <span className="font-normal text-base"> ({destination.destinationAirport})</span>
+                      </h3>
+                      <p className="text-lg">{destination.flightCompanyId}</p>
+                  </div>
+                </Link>
               </SplideSlide>
             ))
           }

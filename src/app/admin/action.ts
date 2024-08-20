@@ -1,8 +1,8 @@
 'use server'
 
 import { prisma } from '@/services/database'
-import { promises as fs } from 'fs'
-import path from 'path'
+import { storageProvider } from "@/services/storage"
+import bcrypt from 'bcryptjs'
 
 
 export async function getDestinations() {
@@ -25,27 +25,80 @@ export async function getUniqueDestination(id: string) {
   return destination
 }
 
+export async function getDestinationsByCategory(categoryId: string) {
+  try {
+    const destinations = await prisma.destination.findMany({
+      where: {
+        categories: {
+          some: {
+            id: categoryId
+          }
+        }
+      }
+    });
+
+    return destinations;
+  } catch (error) {
+    console.error('Error fetching destinations:', error);
+    throw new Error('Error fetching destinations');
+  }
+}
+
 export async function createDestinations(data: any) {
   const destination = await prisma.destination.create({
     data: {
       name: data.destination_name,
+      subtitle: data.subtitle,
       price: parseFloat(data.price),
       regularPrice: parseFloat(data.regular_price),
       departureDates: data.departure_date,
       returnDates: data.return_date,
+      departureCity: data.departure_city,
       departureAirport: data.departure_airport,
       destinationAirport: data.destination_airport,
       flightStopover: Boolean(data.flight_stopover),
       airportStopover: data.stopover_airport,
       imagePath: data.image_path,
       flightCompanyId: data.flight_company,
-      categoryId: data.category
     }
+  })
+
+  // Associa as categorias ao destino
+  await prisma.destinationCategory.createMany({
+    data: data.categories.map((categoryId: string) => ({
+      destinationId: destination.id,
+      categoryId
+    }))
   })
 
   return destination
 }
 
+export async function deleteDestination(id: string, urlImage: string) {
+  function extractFileNameFromUrl(url: string): string | null {
+      // Para extrair apenas o nome do arquivo, podemos dividir o caminho usando '/'
+      // e pegar o último elemento (que deve ser o nome do arquivo)
+      const pathParts = url.split('/')
+      const fileName = pathParts[pathParts.length - 1]
+  
+      return fileName
+  }
+
+  try {
+    const path = extractFileNameFromUrl(urlImage)
+
+    await storageProvider.delete(path as string)
+    await prisma.destination.delete({
+      where: {
+        id
+      }
+    })
+    return {status: 200, msg: 'Destination deleted' }
+  } catch (e) {
+    console.log(e)
+    return {status: 204, msg: 'Destination not found' }
+  }
+}
 
 export async function createCategory(data: any) {
   function createSlug(text: string) {
@@ -110,4 +163,39 @@ export async function getCompanies() {
   })
 
   return companies
+}
+
+export async function getUsers() {
+  const users = await prisma.user.findMany({
+    orderBy: {
+      name: 'asc'
+    }
+  })
+
+  return users
+}
+
+export async function createUser(data: any) {
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email: data.email
+    }
+  })
+
+  if (existingUser) {
+    throw new Error("E-mail já cadastrado.")
+  }
+  
+  const salt = bcrypt.genSaltSync(10)
+  const hashedPassword = bcrypt.hashSync(data.password_one, salt)
+
+  const user = await prisma.user.create({
+    data: {
+      name: data.name,
+      email: data.email,
+      password: hashedPassword
+    }
+  })
+
+  return user
 }

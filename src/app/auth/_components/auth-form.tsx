@@ -34,7 +34,7 @@ export function AuthForm() {
     <Card className="mx-auto max-w-md">
       <CardHeader className="space-y-2">
         <CardTitle className="text-3xl font-bold">Login</CardTitle>
-        <CardDescription>Inisira seu email abaixo para fazer acessar o painel administrativo</CardDescription>
+        <CardDescription>Insira seu email abaixo para acessar o painel administrativo</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4" autoComplete="false">
@@ -43,7 +43,7 @@ export function AuthForm() {
             <Input
               type="email"
               id="email"
-              placeholder="eu@flytop.com"
+              placeholder="me@flytop.com"
               required 
               {...form.register('email')}
             />
@@ -55,7 +55,7 @@ export function AuthForm() {
               id="password"
               placeholder="*********"
               required
-              
+              {...form.register('password')}
             />
           </div>
           <Button className="w-full" type="submit" disabled={form.formState.isSubmitting} >

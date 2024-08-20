@@ -4,9 +4,9 @@ import Image from 'next/image'
 
 export default function Footer() {
   return(
-    <footer className="bg-sky-50 pt-10 pb-2">
+    <footer className="bg-sky-50 pt-10 pb-4">
       <div className="container">
-        <div className="grid grid-cols-1 space-y-8 md:grid-cols-3 md:space-y-0">
+        <div className="flex flex-col space-y-8 md:flex-row md:justify-between md:space-y-0">
           <Logotipo />
           <nav>
             <ul className="flex flex-col justify-center items-center gap-y-1 md:flex-row md:gap-x-10">
@@ -35,14 +35,15 @@ export default function Footer() {
             </ul>
           </nav>
         </div>
-        <div className="flex justify-between text-xs mt-4 pt-2 border-t border-t-sky-300">
-          <p>{new Date().getFullYear() + ' '}Flytop. All rigths reserved.</p>
-          <p>
-            <a href="https://instagram.com/eudevgustavo" className="transition-all duration-200 ease-in hover:text-lime-700">
-            Developed by <Image src="../gvf.svg" width={100} height={100} alt="GVF" className="inline h-3 w-auto"/>
-            </a>
-          </p>
-        </div>
+      </div>
+      <hr className="border-t border-t-sky-300 my-4"/>
+      <div className="container mx-auto flex justify-between text-xs">
+        <p>{new Date().getFullYear() + ' '}Flytop. All rigths reserved.</p>
+        <p>
+          <a href="https://instagram.com/eudevgustavo" className="transition-all duration-200 ease-in hover:text-lime-700">
+          Developed by <Image src="../gvf.svg" width={100} height={100} alt="GVF" className="inline h-3 w-auto"/>
+          </a>
+        </p>
       </div>
     </footer>
   )

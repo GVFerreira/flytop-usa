@@ -1,16 +1,10 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Session {
@@ -45,33 +39,44 @@ model VerificationToken {
 model Destination {
   id                 String   @id @default(uuid())
   name               String
+  subtitle           String
   price              Float
   regularPrice       Float    @map("regular_price")
   departureDates     String   @map("departure_dates")
   returnDates        String   @map("return_dates")
+  departureCity      String   @map("departure_city")
   departureAirport   String   @map("departure_airport")
   destinationAirport String   @map("destination_airport")
   flightStopover     Boolean? @map("flight_stopver")
   airportStopover    String?  @map("airport_stopover")
-  categoryId         String   @map("category_id")
-  flightCompanyId    String?  @map("flight_company")
+  flightCompanyId    String   @map("flight_company")
   imagePath          String
   updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
   createdAt          DateTime @default(now()) @map("created_at")
 
-  category Category @relation(fields: [categoryId], references: [id])
-  company  Company? @relation(fields: [flightCompanyId], references: [id])
+  company    Company               @relation(fields: [flightCompanyId], references: [id])
+  categories DestinationCategory[]
 
   @@map("destinations")
 }
 
 model Category {
-  id           String        @id @default(uuid())
+  id           String                @id @default(uuid())
   name         String
-  slug         String        @unique
-  destinations Destination[]
+  slug         String                @unique
+  destinations DestinationCategory[]
 
   @@map("categories")
+}
+
+model DestinationCategory {
+  id            String      @id @default(uuid())
+  destinationId String
+  categoryId    String
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  category      Category    @relation(fields: [categoryId], references: [id])
+
+  @@map("destination_category")
 }
 
 model Company {

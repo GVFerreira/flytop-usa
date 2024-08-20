@@ -18,6 +18,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        'sans': ['var(--font-roboto)']
+      },
       backgroundImage: {
         'about-us-main': "url('/wing-airplane.jpg')"
       },

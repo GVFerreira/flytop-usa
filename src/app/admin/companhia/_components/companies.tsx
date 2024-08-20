@@ -24,7 +24,7 @@ export default async function Companies() {
              <TableCell>
               <Image
                 src={company.imagePath}
-                className="aspect-square rounded-md object-cover"
+                className="aspect-square rounded-md object-contain"
                 height="64"
                 width="64"
                 alt="Product image"

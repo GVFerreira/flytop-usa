@@ -1,13 +1,42 @@
-'use server'
+'use client' // Mudança aqui
+
+import Image from 'next/image'
+import { useRouter } from "next/navigation"
+import { getDestinations, deleteDestination } from "../../action"
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
-import Image from 'next/image'
-import { getDestinations } from "../../action"
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
+import { toast } from '@/components/ui/use-toast'
+import { useState, useEffect } from 'react'
 
+export default function Destinations() {
+  const router = useRouter()
+  const [destinations, setDestinations] = useState([])
 
-export default async function Destinations() {
-  const destinations = await getDestinations()
+  useEffect(() => {
+    async function fetchDestinations() {
+      const data: any = await getDestinations()
+      setDestinations(data)
+    }
+    fetchDestinations()
+  }, [])
+
+  async function handleDelete(id: string, urlImage: string) {
+    const destination = await deleteDestination(id, urlImage)
+
+    if (destination.status === 200) {
+      toast({
+        title: "Sucesso",
+        description: "Destino excluído com sucesso"
+      })
+      setDestinations(destinations.filter(destination => destination.id !== id))
+    } else {
+      toast({
+        title: "Erro",
+        description: "Não foi possível excluir o destino"
+      })
+    }
+  }
 
   return (
     <Table>
@@ -18,7 +47,7 @@ export default async function Destinations() {
           <TableHead>Valor</TableHead>
           <TableHead>Conexão</TableHead>
           <TableHead>Datas</TableHead>
-          <TableHead>Ações</TableHead>
+          <TableHead className="text-center">Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -35,10 +64,13 @@ export default async function Destinations() {
             </TableCell>
             <TableCell className="font-medium">{destination.name}</TableCell>
             <TableCell className="hidden md:table-cell">{destination.price}</TableCell>
-            <TableCell>{destination.flightStopover ? destination.airportStopover  : "Não"}</TableCell>
+            <TableCell>{destination.flightStopover ? destination.airportStopover : "Não"}</TableCell>
             <TableCell className="hidden md:table-cell">{new Date(destination.departureDates).toDateString()} | {new Date(destination.returnDates).toDateString()}</TableCell>
-            <TableCell>
-              <a href={`/admin/destino/${destination.id}/edit`} className="flex bg-yellow-500 rounded-full size-10"><Pencil className="size-4 m-auto"/></a>
+            <TableCell className="h-auto flex flex-row justify-center gap-x-4">
+              <a href={`/admin/destino/${destination.id}/edit`} >
+                <Pencil className="text-yellow-500 size-6 cursor-pointer" />
+              </a>
+              <Trash2 className="text-red-500 size-6 cursor-pointer" onClick={() => handleDelete(destination.id, destination.imagePath)} />
             </TableCell>
           </TableRow>
         ))}

@@ -1,72 +1,79 @@
 'use client'
 
+import Image from 'next/image'
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
 import { Upload } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useFormState } from "react-dom"
+import Select from "react-select"
+
 import { submitFormAction } from "./actions"
-import Image from 'next/image'
-import { useRouter } from "next/navigation"
 import { createDestinations, getCategories, getCompanies } from "../../action"
 
 export default function AddDestination() {
-  // Insert categories in form
   interface Category {
     id: string;
     name: string;
+    slug: string;
   }
-  const [categories, setCategories] = useState<Category[]>([])
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories()
-        setCategories(data)
 
-      } catch (error) {
-        console.error('Error fetching categories:', error)
-      }
-    }
-
-    fetchCategories()
-  }, [])
-
-  // Insert companies in form
   interface Company {
     id: string;
     name: string;
   }
+
+  const [categories, setCategories] = useState<Category[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
+  const [isClient, setIsClient] = useState(false)
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data: Category[] = await getCategories()
+        setCategories(data)
+      } catch (error) {
+        console.error('Error fetching categories:', error)
+      }
+    }
+    fetchCategories()
+  }, [])
+
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const data = await getCompanies()
+        const data: Company[] = await getCompanies()
         setCompanies(data)
-
       } catch (error) {
         console.error('Error fetching companies:', error)
       }
     }
-
     fetchCompanies()
   }, [])
 
-  // Handler to show stopover
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const [showAirportStopover, setShowAirportStopover] = useState(false)
   const handleCheckboxChange = () => {
     setShowAirportStopover(!showAirportStopover)
   }
 
-  // Handler to submit form
-  const route = useRouter()
+  const router = useRouter()
   const form = useForm()
   const { setValue } = form
 
   const formSubmit = form.handleSubmit(async (data) => {
+    const formattedData = {
+      ...data,
+      categories: data.categories.map((category: { value: string }) => category.value)
+    }
+
     try {
-      console.log(data)
-      await createDestinations(data)
+      await createDestinations(formattedData)
       toast({
         title: 'Sucesso',
         description: 'Destino criado com sucesso'
@@ -78,11 +85,10 @@ export default function AddDestination() {
         description: 'Um erro ocorreu ao criar o destino'
       })
     } finally {
-      route.push("/admin/destino")
-      route.refresh()
+      router.push("/admin/destino")
+      router.refresh()
     }
   })
-
 
   const initialState = {
     url: '',
@@ -92,6 +98,15 @@ export default function AddDestination() {
   useEffect(() => {
     setValue('image_path', state.url)
   }, [state.url, setValue])
+
+  const categoryOptions = categories.map((category: Category) => ({
+    value: category.id,
+    label: category.name
+  }))
+
+  if (!isClient) {
+    return null
+  }
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -109,6 +124,16 @@ export default function AddDestination() {
                 type="text"
                 required
                 {...form.register('destination_name')}
+              />
+            </div>
+            <div>
+              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="subtitle">Subtítulo de oferta</label>
+              <input
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                id="subtitle"
+                type="text"
+                required
+                {...form.register('subtitle')}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -162,13 +187,23 @@ export default function AddDestination() {
                 {...form.register('flight_company')}
               >
                 <option value="0" disabled>Selecione</option>
-                {companies.map((company, index) => (
-                  <option key={index} value={company.id}>
+                {companies.map((company) => (
+                  <option key={company.id} value={company.id}>
                     {company.name}
                   </option>
                 ))}
               </select>
               <span className="text-sm text-zinc-500">Cadastre previamente a companhia aérea.</span>
+            </div>
+            <div>
+              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="departure_city">Cidade de origem</label>
+              <input
+                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                id="departure_city"
+                type="text"
+                required
+                {...form.register('departure_city')}
+              />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -198,22 +233,16 @@ export default function AddDestination() {
             </div>
             <div>
               <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="category">Categoria</label>
-              <select
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                id="category"
-                required
-                {...form.register('category')}
-              >
-                <option value="0" disabled>Selecione</option>
-                {categories.map((category, index) => (
-                  <option key={index} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
+              <Select
+                options={categoryOptions}
+                isMulti
+                isSearchable
+                name="category"
+                onChange={(selectedOptions) => setValue('categories', selectedOptions)}
+              />
               <span className="text-sm text-zinc-500">Cadastre previamente a categoria.</span>
             </div>
-            <div>
+            <div className="mt-0">
               <input
                 className="w-full h-0"
                 id="image_path"
@@ -235,15 +264,15 @@ export default function AddDestination() {
             </div>
             {showAirportStopover && (
               <div>
-              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="stopover_airport">Aeroporto de conexão</label>
-              <input
-                className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                id="stopover_airport"
-                type="text"
-                required
-                {...form.register('stopover_airport')}
-              />
-            </div>
+                <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="stopover_airport">Aeroporto de conexão</label>
+                <input
+                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                  id="stopover_airport"
+                  type="text"
+                  required
+                  {...form.register('stopover_airport')}
+                />
+              </div>
             )}
             <Button
               type="submit"

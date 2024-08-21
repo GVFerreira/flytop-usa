@@ -1,4 +1,4 @@
-'use client' // Mudança aqui
+'use client'
 
 import Image from 'next/image'
 import { useRouter } from "next/navigation"
@@ -9,13 +9,27 @@ import { Pencil, Trash2 } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { useState, useEffect } from 'react'
 
+// Defina o tipo Destination
+interface Destination {
+  id: string
+  name: string
+  price: number
+  flightStopover: boolean | null
+  airportStopover: string | null
+  departureDates: string
+  returnDates: string
+  imagePath: string
+}
+
 export default function Destinations() {
   const router = useRouter()
-  const [destinations, setDestinations] = useState([])
+  
+  // Defina o estado como um array de Destination
+  const [destinations, setDestinations] = useState<Destination[]>([])
 
   useEffect(() => {
     async function fetchDestinations() {
-      const data: any = await getDestinations()
+      const data: Destination[] = await getDestinations()
       setDestinations(data)
     }
     fetchDestinations()

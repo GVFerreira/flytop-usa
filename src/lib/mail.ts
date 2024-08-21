@@ -2,10 +2,10 @@
 
 import nodemailer from "nodemailer"
 
-export async function sendMail({name, email, message}: {name?: string, email?: string, message?: string}) {
+export async function sendMail({ name, email, message }: { name?: string, email?: string, message?: string }) {
   const transporter = nodemailer.createTransport({
     host: "mail.etacanadense.com.br",
-    port: "587",
+    port: 587,
     secure: false,
     auth: {
       user: "noreply@etahub.com.br",

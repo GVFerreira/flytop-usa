@@ -8,6 +8,7 @@ import ShareButton from "./_components/share-button"
 import { Button } from "@/components/ui/button"
 
 import { getDestination } from "../../actions"
+import { SynchronizedCarousel } from "./_components/carousel"
 
 interface Props {
   params: {id: string}
@@ -48,17 +49,20 @@ export default async function Destination({params}: Props) {
           <main style={{flex: "1 1 0"}} className="flex flex-col justify-center">
             <section className="py-10 bg-white">
               <div className="container grid grid-cols-1 md:gap-20 gap-10 md:grid-cols-2">
-                <Image
-                  src={destination.imagePath}
-                  alt={`Image ${destination.destinationAirport}`}
-                  className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900"
-                  width={512}
-                  height={512}
-                />
+                <div>
+                  <SynchronizedCarousel imageSlideFromDB={destination.imageSlide} imageThumb={destination.imagePath}/>
+                  {/* <Image
+                    src={destination.imagePath}
+                    alt={`Image ${destination.destinationAirport}`}
+                    className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900"
+                    width={512}
+                    height={512}
+                  /> */}
+                </div>
                 <div className="bg-[#FFFEEE] flex flex-col gap-y-4 px-6 md:px-12 py-5 md:py-10 rounded-xl shadow-lg">
                   <div className="flex flex-row gap-x-4 justify-start items-center">
                     <h1 className="text-4xl text-sky-950 font-bold">{(destination.name)?.toUpperCase()}</h1>
-                    <ShareButton title={destination.name} url={`https:flytop.gvfwebdesign.com.br/${destination.id}/destination`}/>
+                    <ShareButton title={destination.name} url={`https:flytoptravels.com/${destination.id}/destination`}/>
                   </div>
                   <div>
                     <p className="font-semibold">{destination.subtitle}</p>

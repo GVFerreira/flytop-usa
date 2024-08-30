@@ -1,0 +1,80 @@
+'use client';
+
+import React, { useEffect, useRef } from 'react';
+// @ts-ignore
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
+
+import Image from 'next/image';
+
+type CarouselProps = {
+  imageSlideFromDB: string;
+  imageThumb: string;
+};
+
+export function SynchronizedCarousel({ imageSlideFromDB, imageThumb }: CarouselProps) {
+  const mainRef = useRef<Splide>(null);
+  const thumbsRef = useRef<Splide>(null);
+
+  useEffect(() => {
+    if (mainRef.current && thumbsRef.current) {
+      mainRef.current.sync(thumbsRef.current.splide);
+    }
+  }, []);
+
+  const images = JSON.parse(imageSlideFromDB);
+
+  return (
+    <div>
+      {/* Main Carousel */}
+      <Splide
+        options={{
+          type: 'fade',
+          rewind: true,
+          pagination: false,
+          arrows: false,
+        }}
+        ref={mainRef}
+        className="mb-4"
+      >
+        <SplideSlide>
+          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+        </SplideSlide>
+        {images.map((imageUrl: string, index: number) => (
+          <SplideSlide key={index}>
+            <Image src={imageUrl} alt={`Slide ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+          </SplideSlide>
+        ))}
+      </Splide>
+
+      {/* Thumbnails Carousel */}
+      <Splide
+        options={{
+          fixedWidth: 100,
+          fixedHeight: 100,
+          gap: 10,
+          rewind: true,
+          pagination: false,
+          arrows: false,
+          isNavigation: true,
+          breakpoints: {
+            600: {
+              fixedWidth: 60,
+              fixedHeight: 60,
+            },
+          },
+        }}
+        ref={thumbsRef}
+      >
+        <SplideSlide>
+          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+        </SplideSlide>
+        {images.map((imageUrl: string, index: number) => (
+          <SplideSlide key={index}>
+            <Image src={imageUrl} alt={`Thumbnail ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+          </SplideSlide>
+        ))}
+      </Splide>
+    </div>
+  );
+}

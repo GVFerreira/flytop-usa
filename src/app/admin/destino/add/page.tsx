@@ -4,35 +4,56 @@ import Image from 'next/image'
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
-import { Upload } from "lucide-react"
 import { useState, useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { useFormState } from "react-dom"
+import { useForm, SubmitHandler } from "react-hook-form"
 import Select from "react-select"
-
 import { submitFormAction } from "./actions"
 import { createDestinations, getCategories, getCompanies } from "../../action"
 
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+interface Company {
+  id: string;
+  name: string;
+}
+
+interface FormData {
+  destination_name: string;
+  subtitle: string;
+  price: number;
+  regular_price: number;
+  departure_date: string;
+  return_date: string;
+  flight_company: string;
+  departure_city: string;
+  departure_airport: string;
+  destination_airport: string;
+  categories: string[];
+  image_path: string;
+  images_slide: string[];
+  flight_stopover: boolean;
+  stopover_airport?: string;
+}
+
 export default function AddDestination() {
-  interface Category {
-    id: string;
-    name: string;
-    slug: string;
-  }
-
-  interface Company {
-    id: string;
-    name: string;
-  }
-
   const [categories, setCategories] = useState<Category[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
+  const [uploadedImagePath, setUploadedImagePath] = useState<string>("")
+  const [uploadedImagesSlide, setUploadedImagesSlide] = useState<string[]>([])
+  const [showAirportStopover, setShowAirportStopover] = useState(false)
   const [isClient, setIsClient] = useState(false)
-  
+
+  const router = useRouter()
+  const { register, handleSubmit, setValue, formState } = useForm<FormData>()
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data: Category[] = await getCategories()
+        const data = await getCategories()
         setCategories(data)
       } catch (error) {
         console.error('Error fetching categories:', error)
@@ -44,7 +65,7 @@ export default function AddDestination() {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const data: Company[] = await getCompanies()
+        const data = await getCompanies()
         setCompanies(data)
       } catch (error) {
         console.error('Error fetching companies:', error)
@@ -57,49 +78,61 @@ export default function AddDestination() {
     setIsClient(true)
   }, [])
 
-  const [showAirportStopover, setShowAirportStopover] = useState(false)
   const handleCheckboxChange = () => {
     setShowAirportStopover(!showAirportStopover)
   }
 
-  const router = useRouter()
-  const form = useForm()
-  const { setValue } = form
-
-  const formSubmit = form.handleSubmit(async (data) => {
-    const formattedData = {
-      ...data,
-      categories: data.categories.map((category: { value: string }) => category.value)
+  const handleSingleImageUpload = async (file: File | null) => {
+    if (file) {
+      const formData = new FormData()
+      formData.append('file', file)
+      const { url } = await submitFormAction(null, formData)
+      setUploadedImagePath(url)
     }
+  }
 
+  const handleMultipleImageUpload = async (files: FileList | null) => {
+    if (files) {
+      const uploadedUrls = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const formData = new FormData()
+          formData.append('file', file)
+          const { url } = await submitFormAction(null, formData)
+          return url
+        })
+      )
+      setUploadedImagesSlide((prevUrls) => [...prevUrls, ...uploadedUrls])
+    }
+  }
+
+  useEffect(() => {
+    setValue('image_path', uploadedImagePath)
+  }, [uploadedImagePath, setValue])
+
+  useEffect(() => {
+    setValue('images_slide', uploadedImagesSlide)
+  }, [uploadedImagesSlide, setValue])
+
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      await createDestinations(formattedData)
+      await createDestinations(data)
       toast({
         title: 'Sucesso',
         description: 'Destino criado com sucesso'
       })
+      router.push("/admin/destino")
     } catch (e) {
-      console.log(e)
+      console.error(e)
       toast({
         title: 'Erro',
         description: 'Um erro ocorreu ao criar o destino'
       })
     } finally {
-      router.push("/admin/destino")
       router.refresh()
     }
-  })
-
-  const initialState = {
-    url: '',
   }
-  const [state, formAction] = useFormState(submitFormAction, initialState)
 
-  useEffect(() => {
-    setValue('image_path', state.url)
-  }, [state.url, setValue])
-
-  const categoryOptions = categories.map((category: Category) => ({
+  const categoryOptions = categories.map(category => ({
     value: category.id,
     label: category.name
   }))
@@ -113,8 +146,8 @@ export default function AddDestination() {
       <div className="flex items-center">
         <h1 className="font-semibold text-lg md:text-2xl">Criar destino</h1>
       </div>
-      <div className="grid grid-cols-2 space-x-4">
-        <form onSubmit={formSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full grid grid-cols-2 gap-8">
+        <div>
           <div className="space-y-4">
             <div>
               <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="destination_name">Destino</label>
@@ -123,7 +156,7 @@ export default function AddDestination() {
                 id="destination_name"
                 type="text"
                 required
-                {...form.register('destination_name')}
+                {...register('destination_name')}
               />
             </div>
             <div>
@@ -133,7 +166,7 @@ export default function AddDestination() {
                 id="subtitle"
                 type="text"
                 required
-                {...form.register('subtitle')}
+                {...register('subtitle')}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -144,7 +177,7 @@ export default function AddDestination() {
                   id="price"
                   type="number"
                   required
-                  {...form.register('price')}
+                  {...register('price')}
                 />
               </div>
               <div>
@@ -154,7 +187,7 @@ export default function AddDestination() {
                   id="regular_price"
                   type="number"
                   required
-                  {...form.register('regular_price')}
+                  {...register('regular_price')}
                 />
               </div>
             </div>
@@ -165,7 +198,7 @@ export default function AddDestination() {
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   id="departure_date"
                   required
-                  {...form.register('departure_date')}
+                  {...register('departure_date')}
                 />
               </div>
               <div>
@@ -174,7 +207,7 @@ export default function AddDestination() {
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   id="return_date"
                   required
-                  {...form.register('return_date')}
+                  {...register('return_date')}
                 />
               </div>
             </div>
@@ -184,7 +217,7 @@ export default function AddDestination() {
                 className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 id="flight_company"
                 required
-                {...form.register('flight_company')}
+                {...register('flight_company')}
               >
                 <option value="0" disabled>Selecione</option>
                 {companies.map((company) => (
@@ -202,7 +235,7 @@ export default function AddDestination() {
                 id="departure_city"
                 type="text"
                 required
-                {...form.register('departure_city')}
+                {...register('departure_city')}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -215,7 +248,7 @@ export default function AddDestination() {
                   maxLength={3}
                   placeholder="Exemplo: GRU"
                   required
-                  {...form.register('departure_airport')}
+                  {...register('departure_airport')}
                 />
               </div>
               <div>
@@ -225,88 +258,105 @@ export default function AddDestination() {
                   id="destination_airport"
                   type="text"
                   maxLength={3}
-                  placeholder="Exemplo: VCP"
+                  placeholder="Exemplo: GIG"
                   required
-                  {...form.register('destination_airport')}
+                  {...register('destination_airport')}
                 />
               </div>
             </div>
             <div>
-              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="category">Categoria</label>
+              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="categories">Categorias</label>
               <Select
-                options={categoryOptions}
+                id="categories"
                 isMulti
-                isSearchable
-                name="category"
-                onChange={(selectedOptions) => setValue('categories', selectedOptions)}
-              />
-              <span className="text-sm text-zinc-500">Cadastre previamente a categoria.</span>
-            </div>
-            <div className="mt-0">
-              <input
-                className="w-full h-0"
-                id="image_path"
-                type="text"
-                required
-                {...form.register('image_path')}
+                placeholder="Selecione"
+                onChange={(selectedOptions) =>
+                  setValue(
+                    'categories',
+                    selectedOptions.map((option) => option.value)
+                  )
+                }
+                options={categoryOptions}
               />
             </div>
-            <div className="flex items-center">
+            
+            <div className="flex items-center space-x-2 mt-4">
               <input
-                className="mr-2 rounded focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600"
-                id="flight_stopover"
-                value="true"
                 type="checkbox"
-                {...form.register('flight_stopover', { required: false })}
+                id="flight_stopover"
+                {...register("flight_stopover")}
                 onChange={handleCheckboxChange}
               />
-              <label className="font-medium dark:text-gray-300" htmlFor="flight_stopover">Voo com conexão?</label>
+              <label htmlFor="flight_stopover">Haverá escala?</label>
             </div>
             {showAirportStopover && (
               <div>
-                <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="stopover_airport">Aeroporto de conexão</label>
+                <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="stopover_airport">Aeroporto da escala</label>
                 <input
                   className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   id="stopover_airport"
                   type="text"
-                  required
-                  {...form.register('stopover_airport')}
+                  maxLength={3}
+                  placeholder="Exemplo: MIA"
+                  {...register('stopover_airport')}
                 />
               </div>
             )}
-            <Button
-              type="submit"
-              disabled={form.formState.isSubmitting}
-            >
-              {form.formState.isSubmitting ? 'Salvando...' : 'Salvar destino'}
+          </div>
+          <div className="flex justify-center gap-4 pt-4">
+            <Button type="submit" disabled={formState.isSubmitting}>
+              {formState.isSubmitting ? "Aguarde..." : "Adicionar"}
             </Button>
           </div>
-        </form>
-        <div>
-          <form action={formAction} className="space-y-4">
-            <div>
-              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="file">Upload de imagem</label>
-              <div className="relative w-full">
-                <input
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  id="file"
-                  name="file"
-                  type="file"
-                />
-                <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 dark:text-gray-400">
-                  <Upload className="size-4" />
-                </div>
-              </div>
-            </div>
-
-            <Button variant="secondary">Enviar Imagem</Button>
-
-            {state.url && (
-              <Image src={state.url} alt={state.url} width={512} height={512} className="mt-12"/>
-            )}
-          </form>
         </div>
-      </div>
+        <div>
+          {/* Upload de uma única imagem */}
+          <div>
+            <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="single_image">Imagem principal</label>
+            <input
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              id="single_image"
+              type="file"
+              onChange={(e) => handleSingleImageUpload(e.target.files?.[0] || null)}
+            />
+            {uploadedImagePath && (
+              <div className="mt-4">
+                <Image
+                  src={uploadedImagePath}
+                  alt="Imagem principal"
+                  width={200}
+                  height={200}
+                  className="object-cover rounded-md"
+                />
+              </div>
+            )}
+          </div>
+          {/* Upload de múltiplas imagens */}
+          <div className="mt-8">
+            <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="images_slide">Imagens para o carrossel</label>
+            <input
+              className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              id="images_slide"
+              type="file"
+              multiple
+              onChange={(e) => handleMultipleImageUpload(e.target.files)}
+            />
+          </div>
+          <div className="mt-4 space-y-4">
+            {uploadedImagesSlide.map((url, index) => (
+              <div key={index} className="relative">
+                <Image
+                  src={url}
+                  alt={`Imagem ${index}`}
+                  width={200}
+                  height={200}
+                  className="object-cover rounded-md"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </form>
     </main>
   )
 }

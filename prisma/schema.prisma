@@ -51,6 +51,7 @@ model Destination {
   airportStopover    String?  @map("airport_stopover")
   flightCompanyId    String   @map("flight_company")
   imagePath          String
+  imageSlide         String   @db.Text
   updatedAt          DateTime @default(now()) @updatedAt @map("updated_at")
   createdAt          DateTime @default(now()) @map("created_at")
 

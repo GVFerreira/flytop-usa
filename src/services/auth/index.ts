@@ -40,7 +40,7 @@ export const {
           }
 
           // Comparar a senha fornecida com a senha hashada no banco de dados
-          const isPasswordValid = await bcrypt.compareSync(userpassword, user.password)
+          const isPasswordValid = bcrypt.compareSync(userpassword, user.password)
 
           if (!isPasswordValid) {
             // Se a senha não corresponder, retornar null

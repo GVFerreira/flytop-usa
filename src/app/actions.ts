@@ -29,3 +29,13 @@ export async function getDestination(id: any) {
 
   return destination
 }
+
+export async function createNewsletter(data: any) {
+  const newsletter = await prisma.newsletter.create({
+    data: {
+      email: data.email,
+    }
+  })
+
+  return newsletter
+}

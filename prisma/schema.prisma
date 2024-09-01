@@ -89,3 +89,11 @@ model Company {
 
   @@map("companies")
 }
+
+model Newsletter {
+  id        String   @id @default(uuid())
+  email     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("newsletter")
+}

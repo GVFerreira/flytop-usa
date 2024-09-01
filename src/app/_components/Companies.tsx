@@ -11,15 +11,23 @@ export const Companies = () => {
 
   const companies = [
     'aeromexico',
+    'air-canada',
     'air-france',
+    'alaska',
+    'american-airlines',
     'avianca',
     'azul',
+    'british',
+    'delta',
     'iberia',
     'latam',
+    'qantas',
     'qatar',
     'south-african',
+    'swiss',
     'tap',
-    'turkish'
+    'turkish',
+    'united-airlines'
   ]
 
   return (

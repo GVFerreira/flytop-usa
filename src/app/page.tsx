@@ -99,7 +99,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-10 bg-[#FFFEEE]">
+        <section className="py-10">
           <div className="container md:grid md:grid-cols-2 md:gap-10">
             <div>
               <h2 className="text-4xl font-bold mb-6">FAQs</h2>

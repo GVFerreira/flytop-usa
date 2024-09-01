@@ -17,8 +17,13 @@ import {
   DropdownMenuContent,
   DropdownMenu
 } from "@/components/ui/dropdown-menu"
-
 // import { auth } from '@/services/auth'
+
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
+  title: "Admin - FlyTop Travels",
+}
 
 export default async function Layout({ children }: PropsWithChildren) {
   // const session = await auth()

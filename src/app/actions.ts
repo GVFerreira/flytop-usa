@@ -39,3 +39,13 @@ export async function createNewsletter(data: any) {
 
   return newsletter
 }
+
+export async function getNewsletter() {
+  const newsletter = await prisma.newsletter.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
+
+  return newsletter
+}

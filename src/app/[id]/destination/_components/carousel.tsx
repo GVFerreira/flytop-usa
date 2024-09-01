@@ -1,35 +1,35 @@
-'use client';
+'use client'
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react'
 // @ts-ignore
-import { Splide, SplideSlide } from '@splidejs/react-splide';
-import '@splidejs/react-splide/css';
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css'
 
-import Image from 'next/image';
+import Image from 'next/image'
 
 type CarouselProps = {
-  imageSlideFromDB: string;
-  imageThumb: string;
-};
+  imageSlideFromDB: string
+  imageThumb: string
+}
 
 export function SynchronizedCarousel({ imageSlideFromDB, imageThumb }: CarouselProps) {
-  const mainRef = useRef<Splide>(null);
-  const thumbsRef = useRef<Splide>(null);
+  const mainRef = useRef<Splide>(null)
+  const thumbsRef = useRef<Splide>(null)
 
   useEffect(() => {
     if (mainRef.current && thumbsRef.current) {
-      mainRef.current.sync(thumbsRef.current.splide);
+      mainRef.current.sync(thumbsRef.current.splide)
     }
-  }, []);
+  }, [])
 
-  const images = JSON.parse(imageSlideFromDB);
+  const images = JSON.parse(imageSlideFromDB)
 
   return (
     <div>
       {/* Main Carousel */}
       <Splide
         options={{
-          type: 'fade',
+          type: 'slide',
           rewind: true,
           pagination: false,
           arrows: false,
@@ -38,11 +38,11 @@ export function SynchronizedCarousel({ imageSlideFromDB, imageThumb }: CarouselP
         className="mb-4"
       >
         <SplideSlide>
-          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl border-2 border-slate-900" />
         </SplideSlide>
         {images.map((imageUrl: string, index: number) => (
           <SplideSlide key={index}>
-            <Image src={imageUrl} alt={`Slide ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+            <Image src={imageUrl} alt={`Slide ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl border-2 border-slate-900" />
           </SplideSlide>
         ))}
       </Splide>
@@ -66,15 +66,15 @@ export function SynchronizedCarousel({ imageSlideFromDB, imageThumb }: CarouselP
         }}
         ref={thumbsRef}
       >
-        <SplideSlide>
-          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+        <SplideSlide className="rounded-xl">
+          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl" />
         </SplideSlide>
         {images.map((imageUrl: string, index: number) => (
-          <SplideSlide key={index}>
-            <Image src={imageUrl} alt={`Thumbnail ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900" />
+          <SplideSlide key={index} className="rounded-xl">
+            <Image src={imageUrl} alt={`Thumbnail ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl" />
           </SplideSlide>
         ))}
       </Splide>
     </div>
-  );
+  )
 }

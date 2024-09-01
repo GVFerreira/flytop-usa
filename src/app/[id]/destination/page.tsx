@@ -51,13 +51,6 @@ export default async function Destination({params}: Props) {
               <div className="container grid grid-cols-1 md:gap-20 gap-10 md:grid-cols-2">
                 <div>
                   <SynchronizedCarousel imageSlideFromDB={destination.imageSlide} imageThumb={destination.imagePath}/>
-                  {/* <Image
-                    src={destination.imagePath}
-                    alt={`Image ${destination.destinationAirport}`}
-                    className="aspect-square object-cover w-full md:w-10/12 mx-auto mb-4 rounded-xl border-2 border-slate-900"
-                    width={512}
-                    height={512}
-                  /> */}
                 </div>
                 <div className="bg-[#FFFEEE] flex flex-col gap-y-4 px-6 md:px-12 py-5 md:py-10 rounded-xl shadow-lg">
                   <div className="flex flex-row gap-x-4 justify-start items-center">
@@ -73,7 +66,7 @@ export default async function Destination({params}: Props) {
                   </div>
                   <p className="flex flex-row justify-start items-center gap-x-2">
                     <span>Flight company:</span>
-                    <Image src={destination.company.imagePath} width={150} height={75} alt={destination.company.name}/>
+                    <Image src={destination.company.imagePath} width={150} height={75} alt={destination.company.name} className="mix-blend-multiply"/>
                   </p>
 
                   <div>

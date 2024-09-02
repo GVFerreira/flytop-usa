@@ -46,8 +46,8 @@ export default async function Home() {
         <section className="py-10 bg-[#7ABED5] flex flex-col items-start justify-center lg:bg-about-us-main bg-contain bg-no-repeat bg-right min-h-[500px]">
           <div className="container">
             <div className="w-full md:w-1/2">
-              <h2 className="text-4xl text-sky-950 font-bold mb-6">Who we are?</h2>
-              <p className="mb-4 text-sky-800">From travelers, for travelers. With more than 5 years of experience, we are experts in finding cheap flights, both domestic and international. Our offers are usually 30% to 50% cheaper than regular airline prices. If it&apos;s not an amazing offer, we won&apos;t ship it!.</p>
+              <h2 className="text-4xl text-sky-950 font-bold mb-6">Who are we?</h2>
+              <p className="mb-4 text-sky-800">From travelers, for travelers. With more than 5 years of experience, we are experts in finding cheap flights, both domestic and international. Our offers are usually 30% to 50% cheaper than regular airline prices. If its not an amazing offer, we won&apos;t send it!.</p>
               <Link href="/about"><Button variant="outline">About us</Button></Link>
             </div>
           </div>

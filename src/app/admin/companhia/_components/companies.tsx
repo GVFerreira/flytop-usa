@@ -1,7 +1,7 @@
 'use server'
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import Image from 'next/image'
 import { getCompanies } from "../../action"
 
@@ -15,7 +15,7 @@ export default async function Companies() {
           <TableHead className="w-[80px]">Imagem</TableHead>
           <TableHead>Nome</TableHead>
           <TableHead>Slug</TableHead>
-          <TableHead>Ações</TableHead>
+          <TableHead className="text-center">Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -36,10 +36,11 @@ export default async function Companies() {
             <TableCell>
               <p>{company.slug}</p>
             </TableCell>
-            <TableCell>
-              <a href={`/admin/destino/${company.id}/edit`} className="flex bg-yellow-500 rounded-full size-10">
-                <Pencil className="size-4 m-auto"/>
+            <TableCell className="h-full flex flex-row items-center justify-center gap-x-4">
+              <a href={`/admin/companhia/${company.id}/edit`}>
+                <Pencil className="text-yellow-500 size-6 cursor-pointer" />
               </a>
+              <Trash2 className="text-red-500 size-6 cursor-pointer" /* onClick={() => handleDelete(destination.id, destination.imagePath)} */ />
             </TableCell>
           </TableRow>
         ))}

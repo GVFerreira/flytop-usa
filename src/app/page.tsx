@@ -33,7 +33,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-10 bg-[#FFFEEE]">
+        <section className="pt-10 pb-20">
           <div className="container">
             <h2 className="text-4xl text-sky-950 text-center font-bold mb-6">You may also be interested</h2>
             <p className="text-center mb-10">Didn&apos;t find your ideal trip above? Here are other flights you can take.</p>
@@ -60,7 +60,7 @@ export default async function Home() {
           <Companies />
         </section>
 
-        <section className="bg-sky-950 py-10">
+        <section className="bg-sky-950 py-20">
           <div className="container">
             <h2 className="text-4xl text-center text-slate-50 font-bold mb-10">How Fly Top works?</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -83,7 +83,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-10 bg-white">
+        <section className="py-20 bg-white">
           <div className="md:container">
             <Testemonials />
           </div>
@@ -99,7 +99,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="py-10">
+        <section className="py-20">
           <div className="container md:grid md:grid-cols-2 md:gap-10">
             <div>
               <h2 className="text-4xl font-bold mb-6">FAQs</h2>

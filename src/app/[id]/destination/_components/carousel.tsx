@@ -66,11 +66,11 @@ export function SynchronizedCarousel({ imageSlideFromDB, imageThumb }: CarouselP
         }}
         ref={thumbsRef}
       >
-        <SplideSlide className="rounded-xl">
+        <SplideSlide className="rounded-2xl">
           <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl" />
         </SplideSlide>
         {images.map((imageUrl: string, index: number) => (
-          <SplideSlide key={index} className="rounded-xl">
+          <SplideSlide key={index} className="rounded-2xl">
             <Image src={imageUrl} alt={`Thumbnail ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl" />
           </SplideSlide>
         ))}

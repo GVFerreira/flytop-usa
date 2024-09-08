@@ -45,7 +45,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
                     </h3>
                     <p>From: {destination.departureCity}</p>
                   </div>
-                  <Image src={destination.company.imagePath} width={100} height={50} alt={destination.company.name} className="w-32"/>
+                  <Image src={destination.company.imagePath} width={100} height={50} alt={destination.company.name} className="w-32 mix-blend-multiply"/>
                 </div>
                 <p className="font-semibold">{destination.subtitle}</p>
               </div>

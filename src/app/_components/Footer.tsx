@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import Logotipo from "./Logotipo"
 import Newsletter from "./Newsletter"
 
@@ -51,16 +52,21 @@ export default function Component() {
       </div>
       <div className="container mt-12 flex flex-col items-center justify-between gap-4 border-t border-t-sky-200 pt-6 text-xs text-muted-foreground sm:flex-row">
         <p>&copy; {new Date().getFullYear() + ' '}FlyTop Travels LLC. All rigths reserved.</p>
-        <div className="flex gap-4">
-          <Link href="#" className="hover:underline" prefetch={false}>
+        <div className="flex gap-4 underline">
+          <Link href="#" prefetch={false}>
             Privacy Policy
           </Link>
-          <Link href="#" className="hover:underline" prefetch={false}>
+          <Link href="#" prefetch={false}>
             Terms of Service
           </Link>
-          <Link href="/contact" className="hover:underline" prefetch={false}>
+          <Link href="/contact" prefetch={false}>
             Contact
           </Link>
+          <p>
+          <Link href="https://instagram.com/eudevgustavo" className="transition-all duration-200 ease-in hover:text-lime-700">
+            Developed by <Image src="../gvf.svg" width={100} height={100} alt="GVF" className="inline h-3 w-auto"/>
+          </Link>
+        </p>
         </div>
       </div>
     </footer>

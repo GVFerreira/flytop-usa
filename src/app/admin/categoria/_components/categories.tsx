@@ -2,7 +2,7 @@
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
 import { getCategories } from "../../action"
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 
 
 export default async function Categories() {
@@ -14,7 +14,7 @@ export default async function Categories() {
         <TableRow>
           <TableHead>Nome</TableHead>
           <TableHead>Slug</TableHead>
-          <TableHead>Ações</TableHead>
+          <TableHead className="text-center">Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -26,10 +26,11 @@ export default async function Categories() {
             <TableCell>
               <p>{category.slug}</p>
             </TableCell>
-            <TableCell>
-              <a href={`/admin/destino/${category.id}/edit`} className="flex bg-yellow-500 rounded-full size-10">
-                <Pencil className="size-4 m-auto"/>
+            <TableCell className="h-full flex flex-row items-center justify-center gap-x-4">
+              <a href={`/admin/categoria/${category.id}/edit`} >
+                <Pencil className="text-yellow-500 size-6 cursor-pointer" />
               </a>
+              <Trash2 className="text-red-500 size-6 cursor-pointer" /* onClick={() => handleDelete(destination.id, destination.imagePath)} */ />
             </TableCell>
           </TableRow>
         ))}

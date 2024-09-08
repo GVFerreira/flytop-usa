@@ -16,8 +16,8 @@ interface Destination {
   price: number
   flightStopover: boolean | null
   airportStopover: string | null
-  departureDates: string
-  returnDates: string
+  departureAirport: string
+  destinationAirport: string
   imagePath: string
 }
 
@@ -60,7 +60,7 @@ export default function Destinations() {
           <TableHead className="max-w-[150px]">Destino</TableHead>
           <TableHead>Valor</TableHead>
           <TableHead>Conexão</TableHead>
-          <TableHead>Datas</TableHead>
+          <TableHead>De / Para</TableHead>
           <TableHead className="text-center">Ações</TableHead>
         </TableRow>
       </TableHeader>
@@ -77,10 +77,10 @@ export default function Destinations() {
               />
             </TableCell>
             <TableCell className="font-medium">{destination.name}</TableCell>
-            <TableCell className="hidden md:table-cell">{destination.price}</TableCell>
+            <TableCell className="hidden md:table-cell">U$ {destination.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
             <TableCell>{destination.flightStopover ? destination.airportStopover : "Não"}</TableCell>
-            <TableCell className="hidden md:table-cell">{new Date(destination.departureDates).toDateString()} | {new Date(destination.returnDates).toDateString()}</TableCell>
-            <TableCell className="h-auto flex flex-row justify-center gap-x-4">
+            <TableCell className="hidden md:table-cell">{`${destination.departureAirport} / ${destination.destinationAirport}`} </TableCell>
+            <TableCell className="h-full flex flex-row items-center justify-center gap-x-4">
               <a href={`/admin/destino/${destination.id}/edit`} >
                 <Pencil className="text-yellow-500 size-6 cursor-pointer" />
               </a>

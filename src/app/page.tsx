@@ -11,10 +11,11 @@ import Link from "next/link"
 import { Plane, Send, Tag } from "lucide-react"
 import Footer from "./_components/Footer"
 
-import { getHeroHeader } from './actions'
+import { getHeroHeader, getAlsoInterested } from './actions'
 
 export default async function Home() {
-  const destinations = await getHeroHeader()
+  const heroHeader = await getHeroHeader()
+  const alsoInterested = await getAlsoInterested()
 
   return (
     <>
@@ -29,7 +30,7 @@ export default async function Home() {
             <Button variant="cta" size="lg"><Link href="/destinations">View All Destinations</Link></Button>
           </div>
           <div className="container">
-            <HeroHeader data={destinations}/>
+            <HeroHeader data={heroHeader}/>
           </div>
         </section>
 
@@ -38,7 +39,7 @@ export default async function Home() {
             <h2 className="text-4xl text-sky-950 text-center font-bold mb-6">You may also be interested</h2>
             <p className="text-center mb-10">Didn&apos;t find your ideal trip above? Here are other flights you can take.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <NineCards data={destinations}/>
+              <NineCards data={alsoInterested}/>
             </div>
           </div>
         </section>

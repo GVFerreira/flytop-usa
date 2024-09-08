@@ -1,15 +1,13 @@
 'use client'
 
-import Image from 'next/image'
-import Link from 'next/link'
 import { Destination } from '../types'
 import { Button } from '@/components/ui/button'
 
-type DestinationDataTable = {
+type Destinations = {
   data: Destination[]
 }
 
-export const NineCards = ({data}: DestinationDataTable) => { 
+export const NineCards = ({data}: Destinations) => { 
   return (
     <>
       {

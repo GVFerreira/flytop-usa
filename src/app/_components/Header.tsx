@@ -38,31 +38,9 @@ export default function Header() {
           <Link className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/about">
             About
           </Link>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <p className="flex text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0 items-center">
-                Destinations
-                <ChevronDown className="ml-1 w-4 h-4" />
-              </p>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>
-                <Link className="block px-4 py-2 text-sm hover:bg-gray-100" href="#">
-                  America
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link className="block px-4 py-2 text-sm hover:bg-gray-100" href="#">
-                  Europe
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link className="block px-4 py-2 text-sm hover:bg-gray-100" href="#">
-                  Asia
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Link className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/destinations">
+            Destinations
+          </Link>
           <Button variant="cta">
             <Link className="flex items-center" href="/contact">
               Get in touch

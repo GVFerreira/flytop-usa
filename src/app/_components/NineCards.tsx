@@ -1,4 +1,4 @@
-'use client'
+'use server'
 
 import { Destination } from '../types'
 import { Button } from '@/components/ui/button'

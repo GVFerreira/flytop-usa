@@ -56,5 +56,3 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
     </div>
   )
 }
-
-export const revalidate = 0

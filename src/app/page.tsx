@@ -13,6 +13,8 @@ import Footer from "./_components/Footer"
 
 import { getHeroHeader, getAlsoInterested } from './actions'
 
+export const revalidate = 0
+
 export default async function Home() {
   const heroHeader = await getHeroHeader()
   const alsoInterested = await getAlsoInterested()

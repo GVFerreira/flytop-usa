@@ -25,3 +25,5 @@ export const NineCards = ({data}: Destinations) => {
     </>
   )
 }
+
+export const revalidate = 0

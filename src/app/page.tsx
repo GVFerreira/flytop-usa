@@ -13,9 +13,19 @@ import Footer from "./_components/Footer"
 
 import { getHeroHeader, getAlsoInterested } from './actions'
 
-export default async function Home() {
-  const heroHeader = await getHeroHeader()
-  const alsoInterested = await getAlsoInterested()
+export async function getServerSideProps() {
+  const heroHeader = await getHeroHeader();
+  const alsoInterested = await getAlsoInterested();
+
+  return {
+    props: {
+      heroHeader,
+      alsoInterested
+    }
+  }
+}
+
+export default async function Home({ heroHeader, alsoInterested }: any) {
 
   return (
     <>

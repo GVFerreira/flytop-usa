@@ -3,44 +3,28 @@
 import { prisma } from '@/services/database'
 
 export async function getHeroHeader() {
-  // Busca todos os destinos ordenados por data de criação
   const destinations = await prisma.destination.findMany({
-    where: {
-      categories: {
-        some: {
-          categoryId: "8306031f-a117-47ba-bdf8-e73bb8c6a154"
-        }
-      }
-    },
+    // where: {
+    //   categories: {
+    //     some: {
+    //       category: {
+    //         slug: 'hero-header'
+    //       }
+    //     }
+    //   }
+    // },
     orderBy: {
       createdAt: 'desc'
     },
     include: {
-      company: true // Inclui os dados da companhia aérea
-    },
-    take: 6
-  })
-
-  return destinations
-}
-
-export async function getAlsoInterested() {
-  // Busca todos os destinos ordenados por data de criação
-  const destinations = await prisma.destination.findMany({
-    where: {
+      company: true,
       categories: {
-        some: {
-          categoryId: "6b7a52e6-d56a-45a1-9c66-6480839b314a"
+        include: {
+          category: true
         }
       }
     },
-    include: {
-      company: true // Inclui os dados da companhia aérea
-    },
-    orderBy: {
-      createdAt: 'desc'
-    },
-    take: 9
+    take: 8
   })
 
   return destinations
@@ -48,13 +32,16 @@ export async function getAlsoInterested() {
 
 export async function getDestinations() {
   const destinations = await prisma.destination.findMany({
+    orderBy: {
+      createdAt: "asc"
+    },
     include: {
+      company: true,
       categories: {
         include: {
           category: true
         }
       },
-      company: true
     }
   })
   

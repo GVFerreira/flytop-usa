@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { getDestinations, deleteDestination } from "../../action"
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Eye, Pencil, Trash2 } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
 import { useState, useEffect } from 'react'
 
@@ -85,6 +85,9 @@ export default function Destinations() {
                 <Pencil className="text-yellow-500 size-6 cursor-pointer" />
               </a>
               <Trash2 className="text-red-500 size-6 cursor-pointer" onClick={() => handleDelete(destination.id, destination.imagePath)} />
+              <a href={`/${destination.id}/destination`} target='_blank'>
+                <Eye className="text-blue-500 size-6 cursor-pointer" />
+              </a>
             </TableCell>
           </TableRow>
         ))}

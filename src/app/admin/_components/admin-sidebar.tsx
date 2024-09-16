@@ -3,7 +3,8 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Image from "next/image"
-import { Home, PlaneLanding, Send, Tag, User } from 'lucide-react'
+
+import { Home, PlaneLanding, Send, Tag, User, MessageCircleHeart } from 'lucide-react'
 
 export async function AdminSidebar() {
   const pathname = usePathname()
@@ -54,6 +55,13 @@ export async function AdminSidebar() {
             >
               <Tag className="size-4" />
               Categorias
+            </Link>
+            <Link
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/feedback') ? 'bg-gray-100 text-gray-900' : 'text-gray-500' } text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50`}
+              href="/admin/feedback"
+            >
+              <MessageCircleHeart className="size-4" />
+              Feedbacks
             </Link>
             <Link
               className={`flex items-center gap-3 rounded-lg px-3 py-2 ${ isActive('/admin/usuario') ? 'bg-gray-100 text-gray-900' : 'text-gray-500' } text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50`}

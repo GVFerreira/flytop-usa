@@ -1,23 +1,108 @@
-import { Button } from "@/components/ui/button"
+'use client'
 
-import Header from "./_components/Header"
-import { HeroHeader } from "./_components/HeroHeader"
-import { NineCards } from "./_components/NineCards"
-import { Testemonials } from "./_components/Testemonials"
-import { Companies } from "./_components/Companies"
-import Accordion from "./_components/AccordionFAQ"
+import { getCategories, getHeroHeader } from './actions'
 import Link from "next/link"
 
+import { useState, useEffect } from 'react'
 import { Plane, Send, Tag } from "lucide-react"
-import Footer from "./_components/Footer"
 
-import { getHeroHeader, getAlsoInterested } from './actions'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+
+import NewsletterSection from "./_components/Newsletter-Section"
+import { Testemonials } from "./_components/Testemonials"
+import { HeroHeader } from "./_components/HeroHeader"
+import { Companies } from "./_components/Companies"
+import Accordion from "./_components/AccordionFAQ"
+import Header from "./_components/Header"
+import Footer from "./_components/Footer"
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const revalidate = 0
 
-export default async function Home() {
-  const heroHeader = await getHeroHeader()
-  const alsoInterested = await getAlsoInterested()
+type Category = {
+  id: string
+  name: string
+  slug: string
+  isAirport: boolean | null
+}
+
+type HeroHeaderData = {
+  id: string
+  name: string
+  subtitle: string
+  price: number
+  regularPrice: number
+  departureDates: string
+  returnDates: string
+  departureCity: string
+  departureAirport: string
+  destinationAirport: string
+  flightStopover: boolean | null
+  airportStopover: string | null
+  flightCompanyId: string
+  imagePath: string
+  imageSlide: string
+  company: {
+    id: string
+    name: string
+    slug: string
+    imagePath: string
+  }
+  categories: {
+    id: string
+    destinationId: string
+    categoryId: string
+    category: {
+      id: string
+      name: string
+      slug: string
+      isAirport: boolean | null
+    }
+  }[]
+  updatedAt: Date
+  createdAt: Date
+}
+
+
+export default function Home() {
+  const [heroHeader, setHeroHeader] = useState<HeroHeaderData[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      
+      const heroData = await getHeroHeader()
+      const categoriesData = await getCategories()
+  
+      // Sanitizando os dados do Hero Header
+      const sanitizedHeroData = heroData.map(item => ({
+        ...item,
+        categories: item.categories.map(category => ({
+          ...category,
+          category: {
+            ...category.category,
+            isAirport: category.category.isAirport ?? null // Se for undefined, converte para null
+          }
+        }))
+      }))
+  
+      setHeroHeader(sanitizedHeroData) // Definindo o hero header com os dados sanitizados
+      setCategories(categoriesData)
+      setLoading(false)
+    }
+  
+    fetchData()
+  }, [])
+  
+  // Função para filtrar com base na seleção
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategory(categoryId)
+  }
 
   return (
     <>
@@ -26,25 +111,52 @@ export default async function Home() {
         <section className="py-10 bg-white">
           <div className="container md:flex md:justify-between md:items-end md:space-x-10 mb-10">
             <div>
-              <h1 className="text-5xl leading-[3.5rem] text-sky-950 font-bold mb-6 md:text-7xl md:leading-[5rem]">We connect successful people to the best flights in the world</h1>
+              <h1 className="text-6xl leading-[4.3rem] text-sky-950 font-bold mb-6 md:w-2/3">We connect successful people to the best flights in the world</h1>
               <p className="mb-4 mr-20">Choose your flight below and save up to 50% on your next flight.</p>
             </div>
             <Button variant="cta" size="lg"><Link href="/destinations">View All Destinations</Link></Button>
           </div>
           <div className="container">
-            <HeroHeader data={heroHeader}/>
+            <form action="" className="bg-sky-50 w-full md:w-1/2 mx-auto py-1 px-6 rounded-3xl md:rounded-full my-4">
+              <div className="flex flex-col md:flex-row gap-4 items-center justify-center py-2">
+                <Label className="text-center md:text-xl">Choose the nearest airport for you</Label>
+                <Select onValueChange={handleCategoryChange}>
+                  <SelectTrigger className="w-full md:w-1/3 bg-white rounded-full py-6">
+                    <SelectValue placeholder="Select" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All airports</SelectItem>
+                    {categories.filter(category => category.isAirport).map((category, index) => (
+                      <SelectItem key={index} value={category.id}>{category.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </form>
+            {loading ?
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-12">
+              {[...Array(4)].map((_, index) => (
+                <div key={index} className="flex flex-col items-center justify-center space-y-3">
+                  <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            :
+            <HeroHeader 
+              data={heroHeader.filter(item => 
+                selectedCategory === 'all' ? item.categories.some(cat => cat.category.slug === "hero-header") : item.categories.some(cat => cat.categoryId === selectedCategory)
+              ).slice(0, 8)} 
+            />
+          
+            }
           </div>
         </section>
 
-        <section className="pt-10 pb-20">
-          <div className="container">
-            <h2 className="text-4xl text-sky-950 text-center font-bold mb-6">You may also be interested</h2>
-            <p className="text-center mb-10">Didn&apos;t find your ideal trip above? Here are other flights you can take.</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              <NineCards data={alsoInterested}/>
-            </div>
-          </div>
-        </section>
+        <NewsletterSection />
 
         <section className="py-10 bg-[#7ABED5] flex flex-col items-start justify-center lg:bg-about-us-main bg-contain bg-no-repeat bg-right min-h-[500px]">
           <div className="container">
@@ -88,6 +200,7 @@ export default async function Home() {
 
         <section className="py-20 bg-white">
           <div className="md:container">
+            <h2 className="text-4xl mb-10 text-center">Offers that some of our members have already <b>taken advantage of</b></h2>
             <Testemonials />
           </div>
         </section>

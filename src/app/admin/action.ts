@@ -116,7 +116,8 @@ export async function createCategory(data: any) {
   const category = await prisma.category.create({
     data: {
       name: data.name,
-      slug: createSlug(data.name)
+      slug: createSlug(data.name),
+      isAirport: data.is_airport
     }
   })
 
@@ -164,6 +165,39 @@ export async function getCompanies() {
   })
 
   return companies
+}
+
+export async function getFeedbacks() {
+  const feedbacks = await prisma.feedbacks.findMany({
+    orderBy: {
+      createdAt: 'asc'
+    }
+  })
+
+  return feedbacks
+}
+
+export async function createFeedback(data: any) {
+  function createSlug(text: string) {
+    return text
+      .toLowerCase() // Converte para minúsculas
+      .normalize('NFD') // Normaliza acentos e caracteres especiais
+      .replace(/[\u0300-\u036f]/g, '') // Remove marcas diacríticas
+      .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais, exceto espaços e hífens
+      .trim() // Remove espaços no início e no fim
+      .replace(/\s+/g, '-') // Substitui espaços por hífens
+      .replace(/-+/g, '-') // Remove hífens consecutivos
+  }
+
+  const feedback = await prisma.feedbacks.create({
+    data: {
+      name: data.name,
+      slug: createSlug(data.name),
+      imagePath: data.image_path
+    }
+  })
+
+  return feedback
 }
 
 export async function getUsers() {

@@ -47,6 +47,14 @@ export default function AddCategory() {
               {...form.register('name')}
             />
           </div>
+          <div className="flex items-center space-x-2 mt-4">
+              <input
+                type="checkbox"
+                id="is_airport"
+                {...form.register("is_airport")}
+              />
+              <label htmlFor="is_airport">Esta categoria é um aeroporto?</label>
+            </div>
           <Button
             type="submit"
             disabled={form.formState.isSubmitting}

@@ -6,7 +6,8 @@ import { submitFormAction, getUniqueDestination, updateDestination } from "./act
 import { getCategories, getCompanies } from "../../../action"
 
 import { useState, useEffect } from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import QuillEditor from '../../_components/QuillEditor'
 import Select from "react-select"
 
 import { Button } from "@/components/ui/button"
@@ -59,7 +60,7 @@ export default function EditDestination({ params }: { params: { id: string } }) 
   const [isClient, setIsClient] = useState(false)
 
   const router = useRouter()
-  const { register, handleSubmit, setValue, reset, formState } = useForm<FormData>()
+  const { register, handleSubmit, setValue, reset, formState, control } = useForm<FormData>()
 
   // Fetch data
   useEffect(() => {
@@ -172,6 +173,13 @@ export default function EditDestination({ params }: { params: { id: string } }) 
     }
   }
 
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      ['clean'] // Botão para limpar formatação
+    ]
+  }
+
   if (!isClient) return null
 
   return (
@@ -227,20 +235,28 @@ export default function EditDestination({ params }: { params: { id: string } }) 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="departureDates">Datas de ida</label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  id="departureDates"
-                  required
-                  {...register('departureDates')}
+                <Controller
+                  name="departureDates"
+                  control={control}
+                  render={({ field }) => (
+                    <QuillEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </div>
               <div>
                 <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="returnDates">Datas de volta</label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  id="returnDates"
-                  required
-                  {...register('returnDates')}
+                <Controller
+                  name="returnDates"
+                  control={control}
+                  render={({ field }) => (
+                    <QuillEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </div>
             </div>

@@ -1,14 +1,13 @@
 import type { Metadata, ResolvingMetadata } from "next"
 import Image from "next/image"
-import Link from "next/link"
 
 import Footer from "../../_components/Footer"
 import Header from "../../_components/Header"
 import ShareButton from "./_components/share-button"
-import { Button } from "@/components/ui/button"
 
 import { getDestination } from "../../actions"
 import { SynchronizedCarousel } from "./_components/carousel"
+import BuyButton from "@/app/_components/BuyButton"
 
 interface Props {
   params: {id: string}
@@ -41,7 +40,7 @@ export async function generateMetadata(
 export default async function Destination({params}: Props) {
   try {
     const destination = await getDestination(params.id)
-  
+
     if(destination) {
       return (
         <>
@@ -53,6 +52,7 @@ export default async function Destination({params}: Props) {
                   <SynchronizedCarousel imageSlideFromDB={destination.imageSlide} imageThumb={destination.imagePath}/>
                 </div>
                 <div className="bg-[#FFFEEE] flex flex-col gap-y-4 px-6 md:px-12 py-5 md:py-10 rounded-xl shadow-lg">
+                  <p>Created at: {`${new Date(destination.createdAt).toLocaleDateString('pt-BR')}`}</p>
                   <div className="flex flex-row gap-x-4 justify-start items-center">
                     <h1 className="text-4xl text-sky-950 font-bold">{(destination.name)?.toUpperCase()}</h1>
                     <ShareButton title={destination.name} url={`https:flytoptravels.com/${destination.id}/destination`}/>
@@ -81,14 +81,14 @@ export default async function Destination({params}: Props) {
                     </p>
                   </div>
 
-                  <div>
-                    <p>Departure date: {destination.departureDates}</p>
-                    <p>Return date: {destination.returnDates}</p>
+                  <div className="space-y-4">
+                    <div><span className="text-lg font-bold">Departure date:</span> <div dangerouslySetInnerHTML={{ __html: destination.departureDates}}></div></div>
+                    <div><span className="text-lg font-bold">Return date:</span> <div dangerouslySetInnerHTML={{ __html: destination.returnDates}}></div></div>
                   </div>
-    
-                  <Link href="#">
-                    <Button variant="cta" className="mt-6">BUY NOW</Button>
-                  </Link>
+                  <input></input>
+
+                  <BuyButton departureCity={destination.departureCity} destinationCity={destination.name} flightCompany={destination.company.name}/>
+                  {/* <Button variant="cta" className="mt-6">BUY NOW</Button> */}
                 </div>
               </div>
             </section>

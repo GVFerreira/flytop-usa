@@ -1,14 +1,17 @@
 'use client'
 
+import { createDestinations, getCategories, getCompanies } from "../../action"
+import { submitFormAction } from "./actions"
 import Image from 'next/image'
 import { useRouter } from "next/navigation"
+
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import QuillEditor from '../_components/QuillEditor'
+import { useState, useEffect } from "react"
+import Select from "react-select"
+
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
-import { useState, useEffect } from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
-import Select from "react-select"
-import { submitFormAction } from "./actions"
-import { createDestinations, getCategories, getCompanies } from "../../action"
 
 interface Category {
   id: string;
@@ -48,7 +51,7 @@ export default function AddDestination() {
   const [isClient, setIsClient] = useState(false)
 
   const router = useRouter()
-  const { register, handleSubmit, setValue, formState } = useForm<FormData>()
+  const { register, handleSubmit, setValue, formState, control } = useForm<FormData>()
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -78,9 +81,7 @@ export default function AddDestination() {
     setIsClient(true)
   }, [])
 
-  const handleCheckboxChange = () => {
-    setShowAirportStopover(!showAirportStopover)
-  }
+  const handleCheckboxChange = () => setShowAirportStopover(!showAirportStopover)
 
   const handleSingleImageUpload = async (file: File | null) => {
     if (file) {
@@ -137,9 +138,14 @@ export default function AddDestination() {
     label: category.name
   }))
 
-  if (!isClient) {
-    return null
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      ['clean'] // Botão para limpar formatação
+    ]
   }
+
+  if (!isClient) return null
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -193,21 +199,29 @@ export default function AddDestination() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="departure_date">Datas de ida</label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  id="departure_date"
-                  required
-                  {...register('departure_date')}
+                <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="departure_dates">Datas de ida</label>
+                <Controller
+                  name="departure_date"
+                  control={control}
+                  render={({ field }) => (
+                    <QuillEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </div>
               <div>
                 <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="return_date">Datas de volta</label>
-                <textarea
-                  className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                  id="return_date"
-                  required
-                  {...register('return_date')}
+                <Controller
+                  name="return_date"
+                  control={control}
+                  render={({ field }) => (
+                    <QuillEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 />
               </div>
             </div>

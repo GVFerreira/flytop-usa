@@ -65,6 +65,7 @@ model Category {
   id           String                @id @default(uuid())
   name         String
   slug         String                @unique
+  isAirport    Boolean?
   destinations DestinationCategory[]
 
   @@map("categories")
@@ -96,4 +97,14 @@ model Newsletter {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("newsletter")
+}
+
+model Feedbacks {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  imagePath String
+  createdAt DateTime @default(now())
+
+  @@map("feedbacks")
 }

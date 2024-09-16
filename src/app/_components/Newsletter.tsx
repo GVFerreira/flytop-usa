@@ -10,7 +10,6 @@ import { toast } from "@/components/ui/use-toast"
 import { createNewsletter } from "../actions"
 
 export default function Newsletter() {
-  const route = useRouter()
   const form = useForm()
 
   const formSubmit = form.handleSubmit(async (data) => {

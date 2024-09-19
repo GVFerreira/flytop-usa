@@ -51,7 +51,7 @@ export function NewsletterTable({ data }: TodoDataTable) {
       cell: ({ row }) => {
         return (
           <div className="text-center font-medium">
-            {row.original.createdAt.toLocaleDateString()}
+            {row.original.createdAt.toLocaleDateString("pt-BR")}
           </div>
         )
       }

@@ -65,7 +65,6 @@ type HeroHeaderData = {
   createdAt: Date
 }
 
-
 export default function Home() {
   const [heroHeader, setHeroHeader] = useState<HeroHeaderData[]>([])
   const [categories, setCategories] = useState<Category[]>([])

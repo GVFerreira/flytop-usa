@@ -138,13 +138,6 @@ export default function AddDestination() {
     label: category.name
   }))
 
-  const modules = {
-    toolbar: [
-      ['bold', 'italic', 'underline'],
-      ['clean'] // Botão para limpar formatação
-    ]
-  }
-
   if (!isClient) return null
 
   return (

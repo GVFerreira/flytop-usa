@@ -47,7 +47,7 @@ export default async function Destination({params}: Props) {
           <Header />
           <main style={{flex: "1 1 0"}} className="flex flex-col justify-center">
             <section className="py-10 bg-white">
-              <div className="container grid grid-cols-1 md:gap-20 gap-10 md:grid-cols-2">
+              <div className="container grid grid-cols-1 md:gap-20 gap-10 md:grid-cols-2 items-start">
                 <div>
                   <SynchronizedCarousel imageSlideFromDB={destination.imageSlide} imageThumb={destination.imagePath}/>
                 </div>
@@ -85,10 +85,8 @@ export default async function Destination({params}: Props) {
                     <div><span className="text-lg font-bold">Departure date:</span> <div dangerouslySetInnerHTML={{ __html: destination.departureDates}}></div></div>
                     <div><span className="text-lg font-bold">Return date:</span> <div dangerouslySetInnerHTML={{ __html: destination.returnDates}}></div></div>
                   </div>
-                  <input></input>
 
                   <BuyButton departureCity={destination.departureCity} destinationCity={destination.name} flightCompany={destination.company.name}/>
-                  {/* <Button variant="cta" className="mt-6">BUY NOW</Button> */}
                 </div>
               </div>
             </section>

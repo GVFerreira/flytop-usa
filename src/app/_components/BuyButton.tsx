@@ -34,7 +34,7 @@ const BuyButton = ({ departureCity, destinationCity, flightCompany }: {departure
   <Button
     onClick={() => handleBuyClick(departureCity, destinationCity, flightCompany)}
     variant="cta"
-    className="buy-button mt-6"
+    className="buy-button w-1/2 mx-auto mt-6"
   >
     BUY NOW
   </Button>

@@ -1,13 +1,13 @@
-"use client"
+'use client'
+
+import { createNewsletter } from "../actions"
 
 import { useForm } from "react-hook-form"
-import { useState } from 'react'
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 
-import { createNewsletter } from "../actions"
 
 export default function NewsletterSection() {
   const form = useForm()
@@ -30,6 +30,7 @@ export default function NewsletterSection() {
 
   return (
     <section className="pb-20 pt-10 px-4 sm:px-6 lg:px-8">
+      <script async data-uid="079f61d2fa" src="https://flytop-travels.ck.page/079f61d2fa/index.js"></script>
       <div className="max-w-4xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">Don’t miss out on premium offers</h2>
         <p className="text-center mb-4">Unlock exclusive deals and insider tips for business class flights by joining our elite community. Stay ahead of the curve and elevate your travel experience with unparalleled comfort and style.</p>

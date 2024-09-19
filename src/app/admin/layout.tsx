@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   title: "Admin - FlyTop Travels",
 }
 
+export const revalidate = 0
+
 export default async function Layout({ children }: PropsWithChildren) {
   // const session = await auth()
 

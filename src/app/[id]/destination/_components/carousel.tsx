@@ -38,11 +38,11 @@ export function SynchronizedCarousel({ imageSlideFromDB, imageThumb }: CarouselP
         className="mb-4"
       >
         <SplideSlide>
-          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl border-2 border-slate-900" />
+          <Image src={imageThumb} alt="Thumbnail" width={1024} height={1024} quality={50} priority className="aspect-square object-cover w-full rounded-xl border-2 border-slate-900" />
         </SplideSlide>
         {images.map((imageUrl: string, index: number) => (
           <SplideSlide key={index}>
-            <Image src={imageUrl} alt={`Slide ${index + 1}`} width={1024} height={1024} className="aspect-square object-cover w-full rounded-xl border-2 border-slate-900" />
+            <Image src={imageUrl} alt={`Slide ${index + 1}`} width={1024} height={1024} quality={50} className="aspect-square object-cover w-full rounded-xl border-2 border-slate-900" />
           </SplideSlide>
         ))}
       </Splide>

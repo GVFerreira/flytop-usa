@@ -45,9 +45,23 @@ export async function getDestinationsByCategory(categoryId: string) {
 }
 
 export async function createDestinations(data: any) {
+  function createSlug(text: string) {
+    return text
+      .toLowerCase() // Converte para minúsculas
+      .normalize('NFD') // Normaliza acentos e caracteres especiais
+      .replace(/[\u0300-\u036f]/g, '') // Remove marcas diacríticas
+      .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais, exceto espaços e hífens
+      .trim() // Remove espaços no início e no fim
+      .replace(/\s+/g, '-') // Substitui espaços por hífens
+      .replace(/-+/g, '-') // Remove hífens consecutivos
+  }
+
+  const destination_slug = `from ${data.departure_city} to ${data.destination_name}`
+
   const destination = await prisma.destination.create({
     data: {
       name: data.destination_name,
+      slug: createSlug(destination_slug),
       subtitle: data.subtitle,
       price: parseFloat(data.price),
       regularPrice: parseFloat(data.regular_price),

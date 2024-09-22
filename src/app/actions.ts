@@ -4,15 +4,6 @@ import { prisma } from '@/services/database'
 
 export async function getHeroHeader() {
   const destinations = await prisma.destination.findMany({
-    // where: {
-    //   categories: {
-    //     some: {
-    //       category: {
-    //         slug: 'hero-header'
-    //       }
-    //     }
-    //   }
-    // },
     orderBy: {
       createdAt: 'desc'
     },
@@ -58,10 +49,10 @@ export async function getCategories() {
   return categories
 }
 
-export async function getDestination(id: any) {
+export async function getDestination(slug: any) {
   const destination = await prisma.destination.findUnique({
     where: {
-      id
+      slug
     },
     include: {
       company: true // Inclui os dados da companhia aérea
@@ -89,4 +80,14 @@ export async function getNewsletter() {
   })
 
   return newsletter
+}
+
+export async function getClient() {
+  const client = await prisma.client.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
+
+  return client
 }

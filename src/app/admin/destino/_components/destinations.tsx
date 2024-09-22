@@ -13,6 +13,7 @@ import { useState, useEffect } from 'react'
 interface Destination {
   id: string
   name: string
+  slug: string | null
   price: number
   flightStopover: boolean | null
   airportStopover: string | null
@@ -85,7 +86,7 @@ export default function Destinations() {
                 <Pencil className="text-yellow-500 size-6 cursor-pointer" />
               </a>
               <Trash2 className="text-red-500 size-6 cursor-pointer" onClick={() => handleDelete(destination.id, destination.imagePath)} />
-              <a href={`/${destination.id}/destination`} target='_blank'>
+              <a href={`/${destination.slug}/destination`} target='_blank'>
                 <Eye className="text-blue-500 size-6 cursor-pointer" />
               </a>
             </TableCell>

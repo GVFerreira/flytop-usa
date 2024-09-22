@@ -6,25 +6,17 @@ import { Button } from '@/components/ui/button'
 
 const handleBuyClick = (departureCity: string, destinationCity: string, flightCompany: string) => {
   if (window.Intercom) {
+    const message = `I would like to know more about the flight from ${departureCity} to ${destinationCity} with ${flightCompany}.`
+    
+    // Rastreia o evento
     window.Intercom('trackEvent', {
       departure_city: departureCity,
       destination_city: destinationCity,
-      flight_company: flightCompany
+      flight_company: flightCompany,
     })
-    
-    window.Intercom('show')
 
-    setTimeout(() => {
-      const message = `Eu gostaria de saber mais sobre o voo de ${departureCity} para ${destinationCity} com a ${flightCompany}.`
-      
-      // Acessa o campo de mensagem e preenche
-      const intercomMessageField = document.querySelector<HTMLInputElement>('.intercom-composer-textarea')
-      if (intercomMessageField) {
-        intercomMessageField.value = message;
-        // Dispara um evento para garantir que o texto seja atualizado
-        intercomMessageField.dispatchEvent(new Event('input', { bubbles: true }))
-      }
-    }, 1000)
+    // Abre o Intercom com a mensagem pré-definida
+    window.Intercom('showNewMessage', message)
   } else {
     console.error('Intercom is not loaded')
   }

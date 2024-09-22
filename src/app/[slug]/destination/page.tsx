@@ -10,14 +10,14 @@ import { SynchronizedCarousel } from "./_components/carousel"
 import BuyButton from "@/app/_components/BuyButton"
 
 interface Props {
-  params: {id: string}
+  params: {slug: string}
 }
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const destination = await getDestination(params.id)
+  const destination = await getDestination(params.slug)
  
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []
@@ -39,7 +39,7 @@ export async function generateMetadata(
 
 export default async function Destination({params}: Props) {
   try {
-    const destination = await getDestination(params.id)
+    const destination = await getDestination(params.slug)
 
     if(destination) {
       return (

@@ -20,6 +20,7 @@ import Footer from '../_components/Footer'
 interface Destination {
   id: string
   name: string
+  slug?: string | null
   subtitle: string
   price: number
   regularPrice: number
@@ -178,7 +179,7 @@ export default function Destinations() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               { currentDestinations && currentDestinations.map((destination, index) => (
-                <Link href={`/${destination.id}/destination`} key={index}>
+                <Link href={`/${destination.slug}/destination`} key={index}>
                   <div className="bg-[#FFFEEE] rounded-3xl p-4 hover:cursor-pointer">
                     <div className="mb-4 relative">
                       <Image

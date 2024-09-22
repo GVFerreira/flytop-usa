@@ -39,6 +39,7 @@ model VerificationToken {
 model Destination {
   id                 String   @id @default(uuid())
   name               String
+  slug               String?  @unique
   subtitle           String
   price              Float
   regularPrice       Float    @map("regular_price")
@@ -107,4 +108,18 @@ model Feedbacks {
   createdAt DateTime @default(now())
 
   @@map("feedbacks")
+}
+
+model Client {
+  id       String  @id @default(uuid())
+  stripeId String  @unique @map("stripe_id")
+  name     String
+  email    String
+  amount   Int?
+  currency String?
+
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("clients")
 }

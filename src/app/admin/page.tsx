@@ -1,8 +1,10 @@
 import { NewsletterTable } from "./_components/newsletter-table"
-import { getNewsletter } from "../actions"
+import { getClient, getNewsletter } from "../actions"
+import { ClientTable } from "./_components/client-table"
 
 export default async function Admin() {
   const newsletter = await getNewsletter()
+  const client = await getClient()
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -10,15 +12,9 @@ export default async function Admin() {
         <h1 className="font-semibold text-lg md:text-2xl">Painel administrativo - Flytop</h1>
         <p className="text-md md:text-lg">Informações sensíveis</p>
       </div>
-      <div className="grid grid-cols-2 gap-12">
-        <div>
-          <h3 className="font-semibold text-sm mb-2 md:text-md">Newsletter</h3>
-          <NewsletterTable data={newsletter}/>
-        </div>
-        <div>
-          <h3 className="font-semibold text-sm mb-2 md:text-md">Clientes</h3>
-          <NewsletterTable data={newsletter}/>
-        </div>
+      <div className="w-full">
+        <h3 className="font-semibold text-sm mb-2 md:text-md">Clientes</h3>
+        <ClientTable data={client}/>
       </div>
     </main>
   )

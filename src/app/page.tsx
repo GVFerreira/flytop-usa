@@ -31,6 +31,7 @@ type Category = {
 type HeroHeaderData = {
   id: string
   name: string
+  slug: string | null
   subtitle: string
   price: number
   regularPrice: number

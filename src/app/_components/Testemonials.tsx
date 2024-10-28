@@ -42,6 +42,10 @@ export const Testemonials = () => {
     arrows: true,
     resetProgress: false,
     gap: 10,
+    breakpoints: {
+      1200: { perPage: 2},
+      640 : { perPage: 1 },
+    },
   }
 
   return (
@@ -55,7 +59,7 @@ export const Testemonials = () => {
                   width={1080}
                   height={1920}
                   alt={`${feedback.name} - ${feedback.slug}`}
-                  className="aspect-[9/16] object-cover w-10/12 mx-auto rounded-lg"
+                  className="aspect-[9/16] object-contain w-10/12 mx-auto rounded-lg"
                 />
               </SplideSlide>
             ))

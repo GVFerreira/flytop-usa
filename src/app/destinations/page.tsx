@@ -106,6 +106,10 @@ export default function Destinations() {
             return first - second
           case 'date-desc':
             return second - first
+          case 'price-asc':
+            return a.price - b.price
+          case 'price-desc':
+            return b.price - a.price
           default:
             return 0
         }
@@ -173,6 +177,8 @@ export default function Destinations() {
                   <DropdownMenuRadioGroup value={sortBy} onValueChange={handleSortChange}>
                     <DropdownMenuRadioItem value="date-asc">Date: Older to Newer</DropdownMenuRadioItem>
                     <DropdownMenuRadioItem value="date-desc">Date: Newer to Older</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="price-asc">Price: Low to High</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value="price-desc">Price: High to Low</DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
               </DropdownMenu>

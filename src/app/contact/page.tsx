@@ -3,10 +3,13 @@ import ContactForm from "./_components/ContactForm"
 import Header from "../_components/Header"
 import Footer from "../_components/Footer"
 
+import NewsletterSection from "../_components/Newsletter-Section"
+
 export default function Contact() {
   return (
     <>
       <Header />
+      <NewsletterSection />
       <main>
         <section style={{backgroundImage: "url(/contact-thumbnail.webp)"}} className="bg-cover bg-center bg-no-repeat py-16 px-3 border-b-2 border-b-primary md:py-32 md:px-0">
           <div className="text-white text-center md:w-328 md:px-72 md:mx-auto">

@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { Plane, Send, Tag } from "lucide-react"
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 
@@ -17,7 +18,6 @@ import { Companies } from "./_components/Companies"
 import Accordion from "./_components/AccordionFAQ"
 import Header from "./_components/Header"
 import Footer from "./_components/Footer"
-import { Skeleton } from '@/components/ui/skeleton'
 
 export const revalidate = 0
 
@@ -100,18 +100,17 @@ export default function Home() {
   }, [])
   
   // Função para filtrar com base na seleção
-  const handleCategoryChange = (categoryId: string) => {
-    setSelectedCategory(categoryId)
-  }
+  const handleCategoryChange = (categoryId: string) => setSelectedCategory(categoryId)
 
   return (
     <>
       <Header />
+      <NewsletterSection />
       <main className="w-full">
         <section className="py-10 bg-white">
           <div className="container md:flex md:justify-between md:items-end md:space-x-10 mb-10">
             <div>
-              <h1 className="text-6xl leading-[4.3rem] text-sky-950 font-bold mb-6 md:w-2/3">We connect successful people to the best flights in the world</h1>
+              <h1 className="text-6xl leading-[4.3rem] text-sky-950 font-bold mb-6">We connect successful people to the best flights in the world</h1>
               <p className="mb-4 mr-20">Choose your flight below and save up to 50% on your next flight.</p>
             </div>
             <Button variant="cta" size="lg"><Link href="/destinations">View All Destinations</Link></Button>
@@ -156,25 +155,13 @@ export default function Home() {
           </div>
         </section>
 
-        <NewsletterSection />
-
-        <section className="py-10 bg-[#7ABED5] flex flex-col items-start justify-center lg:bg-about-us-main bg-contain bg-no-repeat bg-right min-h-[500px]">
-          <div className="container">
-            <div className="w-full md:w-1/2">
-              <h2 className="text-4xl text-sky-950 font-bold mb-6">Who are we?</h2>
-              <p className="mb-4 text-sky-800">From travelers, for travelers. With more than 5 years of experience, we are experts in finding cheap flights, both domestic and international. Our offers are usually 30% to 50% cheaper than regular airline prices. If its not an amazing offer, we won&apos;t send it!.</p>
-              <Link href="/about"><Button variant="outline">About us</Button></Link>
-            </div>
-          </div>
-        </section>
-
         <section className="py-10 bg-white">
           <div className="container">
             <h2 className="text-lg text-center text-sky-950 font-bold mb-6">Airline we fly</h2>
           </div>
           <Companies />
         </section>
-
+        
         <section className="bg-sky-950 py-20">
           <div className="container">
             <h2 className="text-4xl text-center text-slate-50 font-bold mb-10">How Fly Top works?</h2>
@@ -194,6 +181,16 @@ export default function Home() {
                 <h3 className="text-2xl text-sky-950 text-center font-bold">Your flight is issued immediately.</h3>
                 <p className="text-center">Our service prioritizes agility and effectiveness. Once payment has been made, we have a team ready to start issuing your tickets.</p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-10 bg-[#7ABED5] flex flex-col items-start justify-center">
+          <div className="container">
+            <div className="w-full md:w-1/2">
+              <h2 className="text-4xl text-sky-950 font-bold mb-6">Who are we?</h2>
+              <p className="mb-4 text-sky-800">From travelers, for travelers. With more than 5 years of experience, we are experts in finding cheap flights, both domestic and international. Our offers are usually 30% to 50% cheaper than regular airline prices. If its not an amazing offer, we won&apos;t send it!.</p>
+              <Link href="/about"><Button variant="outline">About us</Button></Link>
             </div>
           </div>
         </section>

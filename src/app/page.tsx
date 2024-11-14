@@ -35,6 +35,7 @@ type HeroHeaderData = {
   subtitle: string
   price: number
   regularPrice: number
+  isCADol: boolean
   departureDates: string
   returnDates: string
   departureCity: string
@@ -157,7 +158,7 @@ export default function Home() {
 
         <section className="py-10 bg-white">
           <div className="container">
-            <h2 className="text-lg text-center text-sky-950 font-bold mb-6">Airline we fly</h2>
+            <h2 className="text-lg text-center text-sky-950 font-bold mb-6">Airlines we fly</h2>
           </div>
           <Companies />
         </section>

@@ -15,6 +15,7 @@ interface Destination {
   name: string
   slug: string | null
   price: number
+  isCADol: boolean | null
   flightStopover: boolean | null
   airportStopover: string | null
   departureAirport: string
@@ -70,15 +71,15 @@ export default function Destinations() {
           <TableRow key={index}>
             <TableCell>
               <Image
-                src={destination.imagePath}
+                src={`${process.env.NEXT_PUBLIC_APP_URL}/${destination.imagePath}`}
                 className="aspect-square rounded-md object-cover"
                 height="64"
                 width="64"
-                alt="Product image"
+                alt="Image indisponível"
               />
             </TableCell>
             <TableCell className="font-medium">{destination.name}</TableCell>
-            <TableCell className="hidden md:table-cell">U$ {destination.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+            <TableCell className="hidden md:table-cell">{destination.isCADol ? "CA$" : "U$"} {destination.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
             <TableCell>{destination.flightStopover ? destination.airportStopover : "Não"}</TableCell>
             <TableCell className="hidden md:table-cell">{`${destination.departureAirport} / ${destination.destinationAirport}`} </TableCell>
             <TableCell className="h-full flex flex-row items-center justify-center gap-x-4">

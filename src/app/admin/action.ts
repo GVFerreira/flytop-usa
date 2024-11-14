@@ -58,6 +58,8 @@ export async function createDestinations(data: any) {
 
   const destination_slug = `from ${data.departure_city} to ${data.destination_name}`
 
+  console.log(data)
+
   const destination = await prisma.destination.create({
     data: {
       name: data.destination_name,
@@ -65,6 +67,7 @@ export async function createDestinations(data: any) {
       subtitle: data.subtitle,
       price: parseFloat(data.price),
       regularPrice: parseFloat(data.regular_price),
+      isCADol: Boolean(data.is_ca_dol),
       departureDates: data.departure_date,
       returnDates: data.return_date,
       departureCity: data.departure_city,
@@ -73,7 +76,7 @@ export async function createDestinations(data: any) {
       flightStopover: Boolean(data.flight_stopover),
       airportStopover: data.stopover_airport,
       imagePath: data.image_path,
-      imageSlide: JSON.stringify(data.images_slide),
+      imageSlide: data.images_slide,
       flightCompanyId: data.flight_company,
     }
   })
@@ -148,6 +151,20 @@ export async function getCategories() {
   return categories
 }
 
+export async function deleteCategory(id: string) {
+  try {
+    await prisma.category.delete({
+      where: {
+        id
+      }
+    })
+    return {status: 200, msg: 'Category deleted' }
+  } catch (e) {
+    console.log(e)
+    return {status: 204, msg: 'Category not found' }
+  }
+}
+
 export async function createCompany(data: any) {
   function createSlug(text: string) {
     return text
@@ -181,6 +198,43 @@ export async function getCompanies() {
   return companies
 }
 
+export async function deleteCompanie(id: string) {
+  try {
+    await prisma.company.delete({
+      where: {
+        id
+      }
+    })
+    return {status: 200, msg: 'Company deleted' }
+  } catch (e) {
+    console.log(e)
+    return {status: 204, msg: 'Company not found' }
+  }
+}
+
+export async function createFeedback(data: any) {
+  function createSlug(text: string) {
+    return text
+    .toLowerCase() // Converte para minúsculas
+    .normalize('NFD') // Normaliza acentos e caracteres especiais
+    .replace(/[\u0300-\u036f]/g, '') // Remove marcas diacríticas
+    .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais, exceto espaços e hífens
+    .trim() // Remove espaços no início e no fim
+    .replace(/\s+/g, '-') // Substitui espaços por hífens
+    .replace(/-+/g, '-') // Remove hífens consecutivos
+  }
+  
+  const feedback = await prisma.feedbacks.create({
+    data: {
+      name: data.name,
+      slug: createSlug(data.name),
+      imagePath: data.image_path
+    }
+  })
+  
+  return feedback
+}
+
 export async function getFeedbacks() {
   const feedbacks = await prisma.feedbacks.findMany({
     orderBy: {
@@ -191,27 +245,43 @@ export async function getFeedbacks() {
   return feedbacks
 }
 
-export async function createFeedback(data: any) {
-  function createSlug(text: string) {
-    return text
-      .toLowerCase() // Converte para minúsculas
-      .normalize('NFD') // Normaliza acentos e caracteres especiais
-      .replace(/[\u0300-\u036f]/g, '') // Remove marcas diacríticas
-      .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais, exceto espaços e hífens
-      .trim() // Remove espaços no início e no fim
-      .replace(/\s+/g, '-') // Substitui espaços por hífens
-      .replace(/-+/g, '-') // Remove hífens consecutivos
+export async function deleteFeedback(id: string) {
+  try {
+    await prisma.feedbacks.delete({
+      where: {
+        id
+      }
+    })
+    return {status: 200, msg: 'Feedback deleted' }
+  } catch (e) {
+    console.log(e)
+    return {status: 204, msg: 'Feedback not found' }
   }
+}
 
-  const feedback = await prisma.feedbacks.create({
-    data: {
-      name: data.name,
-      slug: createSlug(data.name),
-      imagePath: data.image_path
+export async function createUser(data: any) {
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email: data.email
     }
   })
-
-  return feedback
+  
+  if (existingUser) {
+    throw new Error("E-mail já cadastrado.")
+  }
+  
+  const salt = bcrypt.genSaltSync(10)
+  const hashedPassword = bcrypt.hashSync(data.password_one, salt)
+  
+  const user = await prisma.user.create({
+    data: {
+      name: data.name,
+      email: data.email,
+      password: hashedPassword
+    }
+  })
+  
+  return user
 }
 
 export async function getUsers() {
@@ -224,27 +294,16 @@ export async function getUsers() {
   return users
 }
 
-export async function createUser(data: any) {
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      email: data.email
-    }
-  })
-
-  if (existingUser) {
-    throw new Error("E-mail já cadastrado.")
+export async function deleteUser(id: string) {
+  try {
+    await prisma.user.delete({
+      where: {
+        id
+      }
+    })
+    return {status: 200, msg: 'User deleted' }
+  } catch (e) {
+    console.log(e)
+    return {status: 204, msg: 'User not found' }
   }
-  
-  const salt = bcrypt.genSaltSync(10)
-  const hashedPassword = bcrypt.hashSync(data.password_one, salt)
-
-  const user = await prisma.user.create({
-    data: {
-      name: data.name,
-      email: data.email,
-      password: hashedPassword
-    }
-  })
-
-  return user
 }

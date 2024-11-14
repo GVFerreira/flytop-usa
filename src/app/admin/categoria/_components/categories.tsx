@@ -1,12 +1,47 @@
-'use server'
+'use client'
+
+import { getCategories, deleteCategory } from "../../action"
+
+import { Pencil, Trash2 } from 'lucide-react'
+import { useEffect, useState } from "react"
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
-import { getCategories } from "../../action"
-import { Pencil, Trash2 } from 'lucide-react'
+import { toast } from '@/components/ui/use-toast'
 
+interface Category {
+  id: string
+  name: string
+  slug: string
+}
 
-export default async function Categories() {
-  const categories = await getCategories()
+export default function Categories() {
+  // Defina o estado como um array de Category
+  const [categories, setCategories] = useState<Category[]>([])
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const data: Category[] = await getCategories()
+      setCategories(data)
+    }
+    fetchCategories()
+  }, [])
+
+  async function handleDelete(id: string) {
+    const category = await deleteCategory(id)
+
+    if (category.status === 200) {
+      toast({
+        title: "Sucesso",
+        description: "Categoria excluída com sucesso"
+      })
+      setCategories(categories.filter(category => category.id !== id))
+    } else {
+      toast({
+        title: "Erro",
+        description: "Não é possível excluir a categoria, pois existem destinos relacionados a ela."
+      })
+    }
+  }
 
   return (
     <Table>
@@ -30,7 +65,7 @@ export default async function Categories() {
               <a href={`/admin/categoria/${category.id}/edit`} >
                 <Pencil className="text-yellow-500 size-6 cursor-pointer" />
               </a>
-              <Trash2 className="text-red-500 size-6 cursor-pointer" /* onClick={() => handleDelete(destination.id, destination.imagePath)} */ />
+              <Trash2 className="text-red-500 size-6 cursor-pointer" onClick={() => handleDelete(category.id)} />
             </TableCell>
           </TableRow>
         ))}

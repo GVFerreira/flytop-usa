@@ -1,9 +1,9 @@
 'use client'
 
 import { createDestinations, getCategories, getCompanies } from "../../action"
-import { submitFormAction } from "./actions"
-import Image from 'next/image'
 import { useRouter } from "next/navigation"
+import { v4 as uuidv4 } from 'uuid'
+import Image from 'next/image'
 
 import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import QuillEditor from '../_components/QuillEditor'
@@ -12,6 +12,7 @@ import Select from "react-select"
 
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
+import { Switch } from "@/components/ui/switch"
 
 interface Category {
   id: string;
@@ -45,10 +46,12 @@ interface FormData {
 export default function AddDestination() {
   const [categories, setCategories] = useState<Category[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
-  const [uploadedImagePath, setUploadedImagePath] = useState<string>("")
-  const [uploadedImagesSlide, setUploadedImagesSlide] = useState<string[]>([])
+
+  const [imageSrc, setImageSrc] = useState<string | null>(null)
+  const [slideImagesSrc, setSlideImagesSrc] = useState<string[]>([])
+
+  const [isCADol, setIsCADol] = useState(false)
   const [showAirportStopover, setShowAirportStopover] = useState(false)
-  const [isClient, setIsClient] = useState(false)
 
   const router = useRouter()
   const { register, handleSubmit, setValue, formState, control } = useForm<FormData>()
@@ -77,59 +80,92 @@ export default function AddDestination() {
     fetchCompanies()
   }, [])
 
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
   const handleCheckboxChange = () => setShowAirportStopover(!showAirportStopover)
 
-  const handleSingleImageUpload = async (file: File | null) => {
+  const handleOneFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const formData = new FormData()
-      formData.append('file', file)
-      const { url } = await submitFormAction(null, formData)
-      setUploadedImagePath(url)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setImageSrc(reader.result as string)
+      }
+      reader.readAsDataURL(file)
     }
   }
 
-  const handleMultipleImageUpload = async (files: FileList | null) => {
+  const handleSlideImagesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
     if (files) {
-      const uploadedUrls = await Promise.all(
-        Array.from(files).map(async (file) => {
-          const formData = new FormData()
-          formData.append('file', file)
-          const { url } = await submitFormAction(null, formData)
-          return url
-        })
-      )
-      setUploadedImagesSlide((prevUrls) => [...prevUrls, ...uploadedUrls])
+      const newImagesSrc: string[] = []
+      Array.from(files).forEach(file => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          newImagesSrc.push(reader.result as string)
+          if (newImagesSrc.length === files.length) {
+            setSlideImagesSrc(newImagesSrc)
+          }
+        }
+        reader.readAsDataURL(file)
+      })
     }
   }
-
-  useEffect(() => {
-    setValue('image_path', uploadedImagePath)
-  }, [uploadedImagePath, setValue])
-
-  useEffect(() => {
-    setValue('images_slide', uploadedImagesSlide)
-  }, [uploadedImagesSlide, setValue])
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    try {
-      await createDestinations(data)
-      toast({
-        title: 'Sucesso',
-        description: 'Destino criado com sucesso'
+    if(imageSrc && slideImagesSrc.length > 0) {
+      const blob = await (await fetch(imageSrc)).blob()
+      const formData = new FormData()
+      formData.append('file', blob, `${uuidv4()}.png`)
+  
+      // Primeiro, faça o upload da imagem
+      const uploadResponse = await fetch('/api/upload-photo', {
+        method: 'POST',
+        body: formData
       })
-      router.push("/admin/destino")
-    } catch (e) {
-      console.error(e)
-      toast({
-        title: 'Erro',
-        description: 'Um erro ocorreu ao criar o destino'
-      })
-    } finally {
-      router.refresh()
+  
+      const uploadData = await uploadResponse.json()
+
+      if (uploadResponse.ok && uploadData.imagePath) {
+        if(slideImagesSrc) {
+          // Upload das imagens do slide
+          const slideImagePaths: string[] = []
+          for (const file of slideImagesSrc) {
+            const slideImageBlob = await (await fetch(file)).blob()
+            const slideFormData = new FormData()
+            slideFormData.append('file', slideImageBlob, `${uuidv4()}.png`)
+
+            const slideUploadResponse = await fetch('/api/upload-photo', {
+              method: 'POST',
+              body: slideFormData
+            })
+
+            const slideUploadData = await slideUploadResponse.json()
+            if (slideUploadResponse.ok && slideUploadData.imagePath) {
+              slideImagePaths.push(slideUploadData.imagePath)
+            }
+          }
+            try {
+              await createDestinations({
+                ...data,
+                image_path: uploadData.imagePath,
+                images_slide: JSON.stringify(slideImagePaths),
+                is_ca_dol: isCADol
+              })
+              toast({
+                title: 'Sucesso',
+                description: 'Destino criado com sucesso'
+              })
+              router.push("/admin/destino")
+            } catch (e) {
+              console.error(e)
+              toast({
+                title: 'Erro',
+                description: 'Um erro ocorreu ao criar o destino'
+              })
+            } finally {
+              router.refresh()
+            }
+        }
+      }
     }
   }
 
@@ -137,8 +173,6 @@ export default function AddDestination() {
     value: category.id,
     label: category.name
   }))
-
-  if (!isClient) return null
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -190,6 +224,14 @@ export default function AddDestination() {
                 />
               </div>
             </div>
+            <div>
+              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="regular_price">Valor em dólar canadense?</label>
+              <Switch
+                checked={isCADol}
+                onCheckedChange={() => setIsCADol(!isCADol)}
+              />
+              {isCADol && <p>Sim, o valor é em dólar canadense</p>}
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="departure_dates">Datas de ida</label>
@@ -226,7 +268,7 @@ export default function AddDestination() {
                 required
                 {...register('flight_company')}
               >
-                <option value="0" disabled>Selecione</option>
+                <option>Selecione</option>
                 {companies.map((company) => (
                   <option key={company.id} value={company.id}>
                     {company.name}
@@ -324,20 +366,20 @@ export default function AddDestination() {
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               id="single_image"
               type="file"
-              onChange={(e) => handleSingleImageUpload(e.target.files?.[0] || null)}
+              onChange={handleOneFileChange}
+              required
             />
-            {uploadedImagePath && (
-              <div className="mt-4">
-                <Image
-                  src={uploadedImagePath}
-                  alt="Imagem principal"
-                  width={200}
-                  height={200}
-                  className="object-cover rounded-md"
-                />
-              </div>
+            {imageSrc && (
+              <Image
+                src={imageSrc}
+                alt="Imagem principal"
+                width={300}
+                height={300}
+                className="object-cover aspect-square w-1/2 mt-4 rounded-md"
+              />
             )}
           </div>
+
           {/* Upload de múltiplas imagens */}
           <div className="mt-8">
             <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="images_slide">Imagens para o carrossel</label>
@@ -346,20 +388,20 @@ export default function AddDestination() {
               id="images_slide"
               type="file"
               multiple
-              onChange={(e) => handleMultipleImageUpload(e.target.files)}
+              onChange={handleSlideImagesChange}
+              required
             />
           </div>
-          <div className="mt-4 space-y-4">
-            {uploadedImagesSlide.map((url, index) => (
-              <div key={index} className="relative">
-                <Image
-                  src={url}
-                  alt={`Imagem ${index}`}
-                  width={200}
-                  height={200}
-                  className="object-cover rounded-md"
-                />
-              </div>
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            {slideImagesSrc && slideImagesSrc.map((url, index) => (
+              <Image
+                key={index}
+                src={url}
+                alt={`Imagem ${index}`}
+                width={300}
+                height={300}
+                className="object-cover rounded-md aspect-square w-full"
+              />
             ))}
           </div>
         </div>

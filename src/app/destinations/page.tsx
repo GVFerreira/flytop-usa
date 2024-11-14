@@ -24,6 +24,7 @@ interface Destination {
   subtitle: string
   price: number
   regularPrice: number
+  isCADol: boolean | null
   imagePath: string
   departureCity: string
   destinationAirport: string
@@ -141,7 +142,7 @@ export default function Destinations() {
   return (
     <>
       <Header />
-      <div className="container mx-auto px-4 md:px-6 py-8">
+      <div className="container mx-auto px-4 md:px-6 py-8 flex-1 basis-1">
         <div className="grid md:grid-cols-[240px_1fr] gap-8">
           <div className="grid gap-6">
             <Accordion type="single" collapsible>
@@ -189,7 +190,7 @@ export default function Destinations() {
                   <div className="bg-[#FFFEEE] rounded-3xl p-4 hover:cursor-pointer">
                     <div className="mb-4 relative">
                       <Image
-                        src={destination.imagePath}
+                        src={`${process.env.NEXT_PUBLIC_APP_URL}/${destination.imagePath}`}
                         alt={`Image ${index}`}
                         width={512} 
                         height={512}
@@ -197,13 +198,13 @@ export default function Destinations() {
                       />
                       <div className="absolute top-3 left-2">
                         <span className="rounded-full text-sm line-through px-4 py-2 text-slate-950 bg-white font-bold border border-slate-950">
-                          was U$ {(destination.regularPrice).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                          was {destination.isCADol ? "CA$" : "U$"} {(destination.regularPrice).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                         </span>
                       </div>
                     </div>
                     <div className="space-y-2">
                       <p className="text-2xl font-bold text-green-600">
-                        From U$ {(destination.price).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        From {destination.isCADol ? "CA$" : "U$"} {(destination.price).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                       </p>
                       <h3 className="text-xl font-bold text-sky-950">{destination.name} <span className="font-normal text-base"> ({destination.destinationAirport})</span></h3>
                       <p>From: {destination.departureCity}</p>

@@ -21,11 +21,19 @@ export default function NewsletterSection() {
   const [showNewsletter, setShowNewsletter] = useState<boolean>(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowNewsletter(true)
-    }, 15 * 1000)
+    // Se não estiver definido, configura "allowedToShow" como true
+    if (localStorage.getItem('allowedToShow') === null) {
+      localStorage.setItem('allowedToShow', "true")
+    }
 
-    return () => clearTimeout(timer) // Limpa o timeout ao desmontar o componente
+    const allowedToShow = localStorage.getItem('allowedToShow')
+    if (allowedToShow === "true") {
+      const timer = setTimeout(() => {
+        setShowNewsletter(true)
+      }, 15 * 1000)
+
+      return () => clearTimeout(timer)
+    }
   }, [])
 
   const form = useForm()
@@ -47,7 +55,10 @@ export default function NewsletterSection() {
     }
   })
 
-
+  const handleDontShow = () => {
+    setShowNewsletter(false)
+    localStorage.setItem('allowedToShow', "false")
+  }
 
   return (
     <Dialog open={showNewsletter} onOpenChange={() => setShowNewsletter(false)}>
@@ -57,7 +68,7 @@ export default function NewsletterSection() {
           <DialogDescription>Unlock exclusive deals and insider tips for business class flights by joining our elite community. Stay ahead of the curve and elevate your travel experience with unparalleled comfort and style.</DialogDescription>
         </DialogHeader>
         <div className="bg-white p-6 rounded-lg shadow-md md:w-full">
-          <form onSubmit={formSubmit} className="flex flex-col sm:flex-row gap-4 mb-6">
+          <form onSubmit={formSubmit} className="flex flex-col sm:flex-row gap-4">
             <Input
               type="email"
               placeholder="Enter your email"
@@ -70,6 +81,7 @@ export default function NewsletterSection() {
             </Button>
           </form>
         </div>
+          <Button variant="outline" onClick={handleDontShow} className="w-1/2 mx-auto capitalize">Don’t show me again</Button>
       </DialogContent>
     </Dialog>
   )

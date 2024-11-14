@@ -19,7 +19,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
               <div className="bg-[#FFFEEE] rounded-3xl p-4 transition-all duration-200 ease-in hover:border-2 hover:border-slate-900 hover:cursor-pointer">
                 <div className="mb-8">
                   <Image
-                    src={destination.imagePath}
+                    src={`${process.env.NEXT_PUBLIC_APP_URL}/${destination.imagePath}`}
                     alt={`Image ${index}`}
                     width={512} 
                     height={512}
@@ -28,7 +28,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
                   <div className="relative">
                     <p className="absolute bottom-2 left-5 space-x-4">
                       <span className="rounded-full text-sm px-4 py-2 text-slate-950 bg-green-400 font-bold border border-slate-950">
-                        From U$ {(destination.price).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                        From {destination.isCADol ? "CA$" : "U$"} {(destination.price).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                       </span>
                       <span className="rounded-full text-xs line-through px-4 py-2 text-slate-950 bg-white font-bold border border-slate-950">
                         was {(destination.regularPrice).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}

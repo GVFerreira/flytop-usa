@@ -1,11 +1,47 @@
-'use server'
+'use client'
+
+import { deleteUser, getUsers } from "../../action"
+
+import { useEffect, useState } from "react"
+import { Pencil, Trash2 } from 'lucide-react'
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
-import { Pencil } from 'lucide-react'
-import { getUsers } from "../../action"
+import { toast } from "@/components/ui/use-toast"
 
-export default async function Users() {
-  const users = await getUsers()
+interface User {
+  id: string
+  name: string
+  email: string
+}
+
+export default function Users() {
+  // Defina o estado como um array de Category
+  const [users, setUsers] = useState<User[]>([])
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const data: User[] = await getUsers()
+      setUsers(data)
+    }
+    fetchUsers()
+  }, [])
+
+  async function handleDelete(id: string) {
+    const user = await deleteUser(id)
+
+    if (user.status === 200) {
+      toast({
+        title: "Sucesso",
+        description: "Usuário excluído com sucesso"
+      })
+      setUsers(users.filter(user => user.id !== id))
+    } else {
+      toast({
+        title: "Erro",
+        description: "Não foi possível excluir o usuário."
+      })
+    }
+  }
 
   return (
     <Table>
@@ -25,10 +61,8 @@ export default async function Users() {
             <TableCell>
               <p>{user.email}</p>
             </TableCell>
-            <TableCell>
-              <a href={`/admin/usuario/${user.id}/edit`} className="flex bg-yellow-500 rounded-full size-10">
-                <Pencil className="size-4 m-auto"/>
-              </a>
+            <TableCell className="h-full flex flex-row items-center justify-center gap-x-4">
+              <Trash2 className="text-red-500 size-6 cursor-pointer" onClick={() => handleDelete(user.id)} />
             </TableCell>
           </TableRow>
         ))}

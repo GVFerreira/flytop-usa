@@ -1,12 +1,13 @@
 'use client'
 
-import { getFeedbacks } from "../../action"
+import { deleteFeedback, getFeedbacks } from "../../action"
 import Image from 'next/image'
 
 import { useState, useEffect } from "react"
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
 import { Trash2 } from 'lucide-react'
+import { toast } from "@/components/ui/use-toast"
 
 interface Feedbacks {
   id: string
@@ -33,6 +34,23 @@ export default function Feedbacks() {
     fetchData()
   }, [])
 
+  async function handleDelete(id: string) {
+    const feedback = await deleteFeedback(id)
+
+    if (feedback.status === 200) {
+      toast({
+        title: "Sucesso",
+        description: "Feedback excluído com sucesso"
+      })
+      setFeedbacks(feedbacks.filter(feedback => feedback.id !== id))
+    } else {
+      toast({
+        title: "Erro",
+        description: "Não é possível excluir a categoria, pois existem destinos relacionados a ela."
+      })
+    }
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -58,7 +76,7 @@ export default function Feedbacks() {
               <p>{feedback.name}</p>
             </TableCell>
             <TableCell className="h-full flex flex-row items-stretch justify-center gap-x-4">
-              <Trash2 className="text-red-500 size-6 cursor-pointer" /* onClick={() => handleDelete(destination.id, destination.imagePath)} */ />
+              <Trash2 className="text-red-500 size-6 cursor-pointer" onClick={() => handleDelete(feedback.id)} />
             </TableCell>
           </TableRow>
         ))}

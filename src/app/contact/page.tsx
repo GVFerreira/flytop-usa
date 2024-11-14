@@ -32,7 +32,7 @@ export default function Contact() {
                 <div className="flex flex-row items-center gap-x-4">
                   <MapPinned className="size-9" />
                   <div>
-                    <p className="text-lg font-bold mb-0">Localization:</p>
+                    <p className="text-lg font-bold mb-0">Location:</p>
                     <p className="text-gray-600">Miami, Florida / USA</p>
                   </div>
                 </div>

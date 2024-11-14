@@ -55,7 +55,7 @@ export default async function Destination({params}: Props) {
                   <p>Created at: {`${new Date(destination.createdAt).toLocaleDateString('pt-BR')}`}</p>
                   <div className="flex flex-row gap-x-4 justify-start items-center">
                     <h1 className="text-4xl text-sky-950 font-bold">{(destination.name)?.toUpperCase()}</h1>
-                    <ShareButton title={destination.name} url={`https:flytoptravels.com/${destination.id}/destination`}/>
+                    <ShareButton title={destination.name} url={`https:flytoptravels.com/${destination.slug}/destination`}/>
                   </div>
                   <div>
                     <p className="font-semibold">{destination.subtitle}</p>
@@ -71,7 +71,7 @@ export default async function Destination({params}: Props) {
 
                   <div>
                     <p className="text-4xl text-green-800 font-bold mb-2">
-                      <span className="text-lg">U$ </span>
+                      <span className="text-lg">{destination.isCADol ? "CA$" : "U$"} </span>
                       {(destination.price)?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </p>
 

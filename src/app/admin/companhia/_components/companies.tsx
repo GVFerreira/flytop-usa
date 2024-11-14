@@ -1,12 +1,49 @@
-'use server'
+'use client'
+
+import { deleteCompanie, getCompanies } from "../../action"
+import Image from 'next/image'
+
+import { Pencil, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table'
-import { Pencil, Trash2 } from 'lucide-react'
-import Image from 'next/image'
-import { getCompanies } from "../../action"
+import { toast } from "@/components/ui/use-toast"
 
-export default async function Companies() {
-  const companies = await getCompanies()
+interface Categories {
+  id: string
+  name: string
+  slug: string
+  imagePath: string
+}
+
+export default function Companies() {
+  // Defina o estado como um array de Company
+  const [companies, setCompanies] = useState<Categories[]>([])
+
+  useEffect(() => {
+    async function fetchCategories() {
+      const data: Categories[] = await getCompanies()
+      setCompanies(data)
+    }
+    fetchCategories()
+  }, [])
+
+  async function handleDelete(id: string) {
+    const company = await deleteCompanie(id)
+
+    if (company.status === 200) {
+      toast({
+        title: "Sucesso",
+        description: "Companhia excluída com sucesso"
+      })
+      setCompanies(companies.filter(companie => companie.id !== id))
+    } else {
+      toast({
+        title: "Erro",
+        description: "Não é possível excluir a companhia, pois existem destinos relacionados a ela."
+      })
+    }
+  }
 
   return (
     <Table>
@@ -40,7 +77,7 @@ export default async function Companies() {
               <a href={`/admin/companhia/${company.id}/edit`}>
                 <Pencil className="text-yellow-500 size-6 cursor-pointer" />
               </a>
-              <Trash2 className="text-red-500 size-6 cursor-pointer" /* onClick={() => handleDelete(destination.id, destination.imagePath)} */ />
+              <Trash2 className="text-red-500 size-6 cursor-pointer" onClick={() => handleDelete(company.id)} />
             </TableCell>
           </TableRow>
         ))}

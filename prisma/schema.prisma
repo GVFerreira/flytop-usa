@@ -43,6 +43,7 @@ model Destination {
   subtitle           String
   price              Float
   regularPrice       Float    @map("regular_price")
+  isCADol            Boolean  @map("is_ca_dol")
   departureDates     String   @map("departure_dates") @db.Text
   returnDates        String   @map("return_dates") @db.Text
   departureCity      String   @map("departure_city")
@@ -73,11 +74,12 @@ model Category {
 }
 
 model DestinationCategory {
-  id            String      @id @default(uuid())
+  id            String @id @default(uuid())
   destinationId String
   categoryId    String
-  destination   Destination @relation(fields: [destinationId], references: [id])
-  category      Category    @relation(fields: [categoryId], references: [id])
+
+  destination Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  category    Category    @relation(fields: [categoryId], references: [id])
 
   @@map("destination_category")
 }

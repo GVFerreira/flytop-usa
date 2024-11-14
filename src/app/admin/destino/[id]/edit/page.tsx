@@ -12,6 +12,7 @@ import Select from "react-select"
 
 import { Button } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
+import { Switch } from '@/components/ui/switch'
 
 interface Category {
   id: string
@@ -29,6 +30,7 @@ interface FormData {
   subtitle: string
   price: number
   regularPrice: number
+  isCADol: boolean
   departureDates: string
   returnDates: string
   flightCompanyId: string
@@ -49,15 +51,20 @@ interface Option {
 
 export default function EditDestination({ params }: { params: { id: string } }) {
   const [initialData, setInitialData] = useState<FormData | undefined>(undefined)
+
   const [categories, setCategories] = useState<Category[]>([])
-  const [companies, setCompanies] = useState<Company[]>([])
   const [selectedCategories, setSelectedCategories] = useState<{ value: string; label: string }[]>([])
   const [categoryOptions, setCategoryOptions] = useState<Option[]>([])
+
+  const [companies, setCompanies] = useState<Company[]>([])
+
   const [defaultSelectedOptions, setDefaultSelectedOptions] = useState<Option[]>([])
+
+  const [isCADol, setIsCADol] = useState(false)
   const [showAirportStopover, setShowAirportStopover] = useState(false)
+
   const [uploadedImagePath, setUploadedImagePath] = useState<string | null>()
   const [uploadedImagesSlide, setUploadedImagesSlide] = useState<string[]>()
-  const [isClient, setIsClient] = useState(false)
 
   const router = useRouter()
   const { register, handleSubmit, setValue, reset, formState, control } = useForm<FormData>()
@@ -78,7 +85,6 @@ export default function EditDestination({ params }: { params: { id: string } }) 
 
         setCategories(categoriesData)
         setCompanies(companiesData)
-        setIsClient(true)
         
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -93,6 +99,7 @@ export default function EditDestination({ params }: { params: { id: string } }) 
       setValue('flightCompanyId', initialData.flightCompanyId)
       setValue('categories', initialData.categories)
       setShowAirportStopover(initialData.flightStopover)
+      setIsCADol(initialData.isCADol)
       setUploadedImagePath(initialData.imagePath)
       setUploadedImagesSlide(initialData.imagesSlide)
       reset(initialData)
@@ -126,13 +133,14 @@ export default function EditDestination({ params }: { params: { id: string } }) 
 
   const handleCheckboxChange = () => setShowAirportStopover(!showAirportStopover)
 
-  const handleSingleImageUpload = async (file: File | null) => {
+  const handleSingleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const formData = new FormData()
-      formData.append('file', file)
-      const { url } = await submitFormAction(null, formData)
-      setValue('imagePath', url)
-      setUploadedImagePath(url)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setUploadedImagePath(reader.result as string)
+      }
+      reader.readAsDataURL(file)
     }
   }
 
@@ -156,7 +164,10 @@ export default function EditDestination({ params }: { params: { id: string } }) 
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
-      await updateDestination(data, params.id)
+      await updateDestination({
+        ...data,
+        isCADol
+      }, params.id)
       toast({
         title: 'Sucesso',
         description: 'Destino atualizado com sucesso'
@@ -172,15 +183,6 @@ export default function EditDestination({ params }: { params: { id: string } }) 
       router.refresh()
     }
   }
-
-  const modules = {
-    toolbar: [
-      ['bold', 'italic', 'underline'],
-      ['clean'] // Botão para limpar formatação
-    ]
-  }
-
-  if (!isClient) return null
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -231,6 +233,14 @@ export default function EditDestination({ params }: { params: { id: string } }) 
                   {...register('regularPrice')}
                 />
               </div>
+            </div>
+            <div>
+              <label className="block mb-1 font-medium dark:text-gray-300" htmlFor="regular_price">Valor em dólar canadense?</label>
+              <Switch
+                checked={isCADol}
+                onCheckedChange={() => setIsCADol(!isCADol)}
+              />
+              {isCADol && <p>Sim, o valor é em dólar canadense</p>}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -364,15 +374,15 @@ export default function EditDestination({ params }: { params: { id: string } }) 
               className="w-full mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               id="single_image"
               type="file"
-              onChange={(e) => handleSingleImageUpload(e.target.files?.[0] || null)}
+              onChange={handleSingleImageUpload}
             />
             {uploadedImagePath ? (
               <Image
-                src={uploadedImagePath}
+                src={`${process.env.NEXT_PUBLIC_APP_URL}/${uploadedImagePath}`}
                 alt="Imagem principal"
                 width={300}
                 height={300}
-                className="object-cover rounded-md aspect-square"
+                className="object-cover aspect-square w-1/2 mt-4 rounded-md"
               />)
               :
               (
@@ -399,7 +409,7 @@ export default function EditDestination({ params }: { params: { id: string } }) 
             uploadedImagesSlide.map((imageUrl, index) => (
                 <Image
                   key={index}
-                  src={imageUrl}
+                  src={`${process.env.NEXT_PUBLIC_APP_URL}/${imageUrl}`}
                   alt={`Imagem do carrossel ${index + 1}`}
                   width={300}
                   height={300}

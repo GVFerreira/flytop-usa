@@ -45,6 +45,7 @@
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",
     "@splidejs/splide-extension-intersection": "^0.2.0",
     "@tanstack/react-table": "^8.20.5",
+    "@types/uuid": "^10.0.0",
     "aws-sdk": "^2.1646.0",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
@@ -75,6 +76,7 @@
     "stripe": "^16.12.0",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
+    "uuid": "^11.0.3",
     "vaul": "^0.9.0",
     "zod": "^3.22.4"
   },

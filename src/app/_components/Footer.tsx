@@ -53,10 +53,10 @@ export default function Component() {
       <div className="container mt-12 flex flex-col items-center justify-between gap-4 border-t border-t-sky-200 pt-6 text-xs text-muted-foreground sm:flex-row">
         <p>&copy; {new Date().getFullYear() + ' '}FlyTop Travels LLC. All rigths reserved.</p>
         <div className="flex gap-4 underline">
-          <Link href="#" prefetch={false}>
+          <Link href="/privacy-policy" prefetch={false}>
             Privacy Policy
           </Link>
-          <Link href="#" prefetch={false}>
+          <Link href="/terms-service" prefetch={false}>
             Terms of Service
           </Link>
           <Link href="/contact" prefetch={false}>

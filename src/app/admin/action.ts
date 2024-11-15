@@ -58,8 +58,6 @@ export async function createDestinations(data: any) {
 
   const destination_slug = `from ${data.departure_city} to ${data.destination_name}`
 
-  console.log(data)
-
   const destination = await prisma.destination.create({
     data: {
       name: data.destination_name,

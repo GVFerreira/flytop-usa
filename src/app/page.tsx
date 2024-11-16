@@ -111,7 +111,7 @@ export default function Home() {
         <section className="py-10 bg-white">
           <div className="container md:flex md:justify-between md:items-end md:space-x-10 mb-10">
             <div>
-              <h1 className="text-6xl leading-[4.3rem] text-sky-950 font-bold mb-6">We connect successful people to the best flights in the world</h1>
+              <h1 className="text-4xl leading-[3rem] text-sky-950 font-bold mb-6 md:text-6xl md:leading-[4.3rem]">We connect successful people to the best flights in the world</h1>
               <p className="mb-4 mr-20">Choose your flight below and save up to 50% on your next flight.</p>
             </div>
             <Button variant="cta" size="lg"><Link href="/destinations">View All Destinations</Link></Button>

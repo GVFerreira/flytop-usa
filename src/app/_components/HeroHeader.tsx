@@ -19,7 +19,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
               <div className="bg-[#FFFEEE] rounded-3xl p-4 transition-all duration-200 ease-in hover:border-2 hover:border-slate-900 hover:cursor-pointer">
                 <div className="mb-8">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_APP_URL}/${destination.imagePath}`}
+                    src={destination.imagePath}
                     alt={`Image ${index}`}
                     width={512} 
                     height={512}

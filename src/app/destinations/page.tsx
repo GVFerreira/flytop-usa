@@ -190,7 +190,7 @@ export default function Destinations() {
                   <div className="bg-[#FFFEEE] rounded-3xl p-4 hover:cursor-pointer">
                     <div className="mb-4 relative">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_APP_URL}/${destination.imagePath}`}
+                        src={destination.imagePath}
                         alt={`Image ${index}`}
                         width={512} 
                         height={512}

@@ -1,6 +1,7 @@
 'use client'
 
 import { createDestinations, getCategories, getCompanies } from "../../action"
+import { submitFormAction } from "./actions"
 import { useRouter } from "next/navigation"
 import { v4 as uuidv4 } from 'uuid'
 import Image from 'next/image'
@@ -47,8 +48,8 @@ export default function AddDestination() {
   const [categories, setCategories] = useState<Category[]>([])
   const [companies, setCompanies] = useState<Company[]>([])
 
-  const [imageSrc, setImageSrc] = useState<string | null>(null)
-  const [slideImagesSrc, setSlideImagesSrc] = useState<string[]>([])
+  const [uploadedImagePath, setUploadedImagePath] = useState<string>("")
+  const [uploadedImagesSlide, setUploadedImagesSlide] = useState<string[]>([])
 
   const [isCADol, setIsCADol] = useState(false)
   const [showAirportStopover, setShowAirportStopover] = useState(false)
@@ -82,90 +83,53 @@ export default function AddDestination() {
 
   const handleCheckboxChange = () => setShowAirportStopover(!showAirportStopover)
 
-  const handleOneFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handleSingleImageUpload = async (file: File | null) => {
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setImageSrc(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+      const formData = new FormData()
+      formData.append('file', file)
+      const { url } = await submitFormAction(null, formData)
+      setUploadedImagePath(url)
     }
   }
 
-  const handleSlideImagesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files
+  const handleMultipleImageUpload = async (files: FileList | null) => {
     if (files) {
-      const newImagesSrc: string[] = []
-      Array.from(files).forEach(file => {
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          newImagesSrc.push(reader.result as string)
-          if (newImagesSrc.length === files.length) {
-            setSlideImagesSrc(newImagesSrc)
-          }
-        }
-        reader.readAsDataURL(file)
-      })
+      const uploadedUrls = await Promise.all(
+        Array.from(files).map(async (file) => {
+          const formData = new FormData()
+          formData.append('file', file)
+          const { url } = await submitFormAction(null, formData)
+          return url
+        })
+      )
+      setUploadedImagesSlide((prevUrls) => [...prevUrls, ...uploadedUrls])
     }
   }
+
+  useEffect(() => {
+    setValue('image_path', uploadedImagePath)
+  }, [uploadedImagePath, setValue])
+
+  useEffect(() => {
+    setValue('images_slide', uploadedImagesSlide)
+  }, [uploadedImagesSlide, setValue])
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    if(imageSrc && slideImagesSrc.length > 0) {
-      const blob = await (await fetch(imageSrc)).blob()
-      const formData = new FormData()
-      formData.append('file', blob, `${uuidv4()}.png`)
-  
-      // Primeiro, faça o upload da imagem
-      const uploadResponse = await fetch('/api/upload-photo', {
-        method: 'POST',
-        body: formData
+    try {
+      await createDestinations(data)
+      toast({
+        title: 'Sucesso',
+        description: 'Destino criado com sucesso'
       })
-  
-      const uploadData = await uploadResponse.json()
-
-      if (uploadResponse.ok && uploadData.imagePath) {
-        if(slideImagesSrc) {
-          // Upload das imagens do slide
-          const slideImagePaths: string[] = []
-          for (const file of slideImagesSrc) {
-            const slideImageBlob = await (await fetch(file)).blob()
-            const slideFormData = new FormData()
-            slideFormData.append('file', slideImageBlob, `${uuidv4()}.png`)
-
-            const slideUploadResponse = await fetch('/api/upload-photo', {
-              method: 'POST',
-              body: slideFormData
-            })
-
-            const slideUploadData = await slideUploadResponse.json()
-            if (slideUploadResponse.ok && slideUploadData.imagePath) {
-              slideImagePaths.push(slideUploadData.imagePath)
-            }
-          }
-            try {
-              await createDestinations({
-                ...data,
-                image_path: uploadData.imagePath,
-                images_slide: JSON.stringify(slideImagePaths),
-                is_ca_dol: isCADol
-              })
-              toast({
-                title: 'Sucesso',
-                description: 'Destino criado com sucesso'
-              })
-              router.push("/admin/destino")
-            } catch (e) {
-              console.error(e)
-              toast({
-                title: 'Erro',
-                description: 'Um erro ocorreu ao criar o destino'
-              })
-            } finally {
-              router.refresh()
-            }
-        }
-      }
+      router.push("/admin/destino")
+    } catch (e) {
+      console.error(e)
+      toast({
+        title: 'Erro',
+        description: 'Um erro ocorreu ao criar o destino'
+      })
+    } finally {
+      router.refresh()
     }
   }
 
@@ -366,12 +330,12 @@ export default function AddDestination() {
               className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               id="single_image"
               type="file"
-              onChange={handleOneFileChange}
+              onChange={(e) => handleSingleImageUpload(e.target.files?.[0] || null)}
               required
             />
-            {imageSrc && (
+            {uploadedImagePath && (
               <Image
-                src={imageSrc}
+                src={uploadedImagePath}
                 alt="Imagem principal"
                 width={300}
                 height={300}
@@ -388,12 +352,12 @@ export default function AddDestination() {
               id="images_slide"
               type="file"
               multiple
-              onChange={handleSlideImagesChange}
+              onChange={(e) => handleMultipleImageUpload(e.target.files)}
               required
             />
           </div>
           <div className="mt-4 grid grid-cols-2 gap-2">
-            {slideImagesSrc && slideImagesSrc.map((url, index) => (
+            {uploadedImagesSlide.map((url, index) => (
               <Image
                 key={index}
                 src={url}

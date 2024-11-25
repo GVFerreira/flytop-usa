@@ -133,14 +133,13 @@ export default function EditDestination({ params }: { params: { id: string } }) 
 
   const handleCheckboxChange = () => setShowAirportStopover(!showAirportStopover)
 
-  const handleSingleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+  const handleSingleImageUpload = async (file: File | null) => {
     if (file) {
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setUploadedImagePath(reader.result as string)
-      }
-      reader.readAsDataURL(file)
+      const formData = new FormData()
+      formData.append('file', file)
+      const { url } = await submitFormAction(null, formData)
+      setValue('imagePath', url)
+      setUploadedImagePath(url)
     }
   }
 
@@ -374,11 +373,11 @@ export default function EditDestination({ params }: { params: { id: string } }) 
               className="w-full mb-4 px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-slate-800 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               id="single_image"
               type="file"
-              onChange={handleSingleImageUpload}
+              onChange={(e) => handleSingleImageUpload(e.target.files?.[0] || null)}
             />
             {uploadedImagePath ? (
               <Image
-                src={`${process.env.NEXT_PUBLIC_APP_URL}/${uploadedImagePath}`}
+                src={uploadedImagePath}
                 alt="Imagem principal"
                 width={300}
                 height={300}
@@ -409,7 +408,7 @@ export default function EditDestination({ params }: { params: { id: string } }) 
             uploadedImagesSlide.map((imageUrl, index) => (
                 <Image
                   key={index}
-                  src={`${process.env.NEXT_PUBLIC_APP_URL}/${imageUrl}`}
+                  src={imageUrl}
                   alt={`Imagem do carrossel ${index + 1}`}
                   width={300}
                   height={300}

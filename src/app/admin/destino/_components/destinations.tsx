@@ -71,7 +71,7 @@ export default function Destinations() {
           <TableRow key={index}>
             <TableCell>
               <Image
-                src={`${process.env.NEXT_PUBLIC_APP_URL}/${destination.imagePath}`}
+                src={destination.imagePath}
                 className="aspect-square rounded-md object-cover"
                 height="64"
                 width="64"

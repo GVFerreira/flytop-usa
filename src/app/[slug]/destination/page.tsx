@@ -55,7 +55,7 @@ export default async function Destination({params}: Props) {
                   <p>Created at: {`${new Date(destination.createdAt).toLocaleDateString('pt-BR')}`}</p>
                   <div className="flex flex-row gap-x-4 justify-start items-center">
                     <h1 className="text-4xl text-sky-950 font-bold">{(destination.name)?.toUpperCase()}</h1>
-                    <ShareButton title={destination.name} url={`https:flytoptravels.com/${destination.slug}/destination`}/>
+                    <ShareButton title={destination.name} url={`https://flytoptravels.com/${destination.slug}/destination`}/>
                   </div>
                   <div>
                     <p className="font-semibold">{destination.subtitle}</p>

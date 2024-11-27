@@ -74,7 +74,7 @@ export async function createDestinations(data: any) {
       flightStopover: Boolean(data.flight_stopover),
       airportStopover: data.stopover_airport,
       imagePath: data.image_path,
-      imageSlide: data.images_slide,
+      imageSlide: JSON.stringify(data.images_slide),
       flightCompanyId: data.flight_company,
     }
   })

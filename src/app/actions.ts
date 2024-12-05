@@ -4,6 +4,15 @@ import { prisma } from '@/services/database'
 
 export async function getHeroHeader() {
   const destinations = await prisma.destination.findMany({
+    where: {
+      categories: {
+        some: {
+          category: {
+            slug: 'hero-header'
+          }
+        }
+      }
+    },
     orderBy: {
       createdAt: 'desc'
     },

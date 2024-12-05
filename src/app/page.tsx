@@ -99,6 +99,7 @@ export default function Home() {
   
     fetchData()
   }, [])
+
   
   // Função para filtrar com base na seleção
   const handleCategoryChange = (categoryId: string) => setSelectedCategory(categoryId)
@@ -149,7 +150,7 @@ export default function Home() {
             <HeroHeader 
               data={heroHeader.filter(item => 
                 selectedCategory === 'all' ? item.categories.some(cat => cat.category.slug === "hero-header") : item.categories.some(cat => cat.categoryId === selectedCategory)
-              ).slice(0, 8)} 
+              )} 
             />
           
             }
@@ -208,7 +209,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold mb-6">What is our mission?</h2>
             <div>
               <p className="text-slate-200 mb-4">Our mission is to ensure that our customers never pay full price for an airline ticket again.</p>
-              <Button variant="cta">Click here</Button>
+              <Button variant="cta"><Link href="/about">Click here</Link></Button>
             </div>
           </div>
         </section>

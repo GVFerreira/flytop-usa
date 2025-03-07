@@ -3,6 +3,7 @@ import { Roboto } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import Script from "next/script"
+import { GoogleTagManager } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   title: "FlyTop Travels",
@@ -19,7 +20,17 @@ const roboto = Roboto({
 export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-US" className={`${roboto.variable}`}>
+      <GoogleTagManager gtmId="GTM-5Z3KSBV5" />
       <body className="text-sky-900 flex flex-col min-h-screen">
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-5Z3KSBV5"
+            height="0"
+            width="0"
+            style={{ display: 'none', visibility: 'hidden' }}
+          >
+          </iframe>
+        </noscript>
         {children}
         <Toaster />
       </body>

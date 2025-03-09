@@ -17,7 +17,7 @@ const roboto = Roboto({
   variable: '--font-roboto'
 })
 
-export default function RootLayout({children}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({children}: { children: React.ReactNode }) {
   return (
     <html lang="en-US" className={`${roboto.variable}`}>
       <GoogleTagManager gtmId="GTM-5Z3KSBV5" />

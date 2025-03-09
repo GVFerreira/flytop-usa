@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { Destination } from '../types'
 import { Plane } from 'lucide-react'
 
@@ -15,7 +14,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
       {
         data.map((destination, index) => (
           <article key={index}>
-            <Link href={`/${destination.slug}/destination`}>
+            <a href={`/${destination.slug}/destination`}>
               <div className="bg-[#FFFEEE] rounded-3xl p-4 transition-all duration-200 ease-in hover:border-2 hover:border-slate-900 hover:cursor-pointer">
                 <div className="mb-8">
                   <Image
@@ -43,7 +42,7 @@ export const HeroHeader = ({data}: DestinationDataTable) => {
                   <p className="font-semibold">{destination.subtitle}</p>
                 </div>
               </div>
-            </Link>
+            </a>
           </article>
         ))
       }

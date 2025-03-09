@@ -3,7 +3,10 @@ import Footer from "../_components/Footer"
 import Header from "../_components/Header"
 
 import NewsletterSection from "../_components/Newsletter-Section"
-import { Globe } from "lucide-react"
+
+export const metadata = {
+  title: "FlyTop - About Us"
+}
 
 export default async function About() {
   return (

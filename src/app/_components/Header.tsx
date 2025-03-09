@@ -3,15 +3,8 @@
 import { useState } from 'react'
 
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
-import { ChevronDown, Menu, X, Mail } from "lucide-react"
-import Link from "next/link"
+import { Menu, X, Mail } from "lucide-react"
 import Logotipo from "./Logotipo"
 
 export default function Header() {
@@ -32,20 +25,20 @@ export default function Header() {
           {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
         <nav className={`md:flex items-center md:space-x-12 ${menuOpen ? 'block' : 'hidden'} absolute md:relative top-16 md:top-auto left-0 w-full md:w-auto bg-white shadow-md py-6 px-8 md:shadow-none md:py-0 md:bg-transparent z-10 md:z-auto`}>
-          <Link className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/">
+          <a className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/">
             Home
-          </Link>
-          <Link className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/about">
+          </a>
+          <a className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/about">
             About
-          </Link>
-          <Link className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/destinations">
+          </a>
+          <a className="block md:inline text-base font-medium hover:text-opacity-75 py-2 md:py-0 px-4 md:px-0" href="/destinations">
             Destinations
-          </Link>
+          </a>
           <Button variant="cta">
-            <Link className="flex items-center" href="/contact">
+            <a className="flex items-center" href="/contact">
               Get in touch
               <Mail className="ml-2 w-4 h-4" />
-            </Link>
+            </a>
           </Button>
         </nav>
       </div>

@@ -1,7 +1,6 @@
 'use client'
 
 import { getCategories, getHeroHeader } from './actions'
-import Link from "next/link"
 
 import { useState, useEffect } from 'react'
 import { Plane, Send, Tag } from "lucide-react"
@@ -115,7 +114,7 @@ export default function Home() {
               <h1 className="text-4xl leading-[3rem] text-sky-950 font-bold mb-6 md:text-6xl md:leading-[4.3rem]">We connect successful people to the best flights in the world</h1>
               <p className="mb-4 mr-20">Choose your flight below and save up to 50% on your next flight.</p>
             </div>
-            <Button variant="cta" size="lg"><Link href="/destinations">View All Destinations</Link></Button>
+            <Button variant="cta" size="lg"><a href="/destinations">View All Destinations</a></Button>
           </div>
           <div className="container">
             <form action="" className="bg-sky-50 w-full md:w-1/2 mx-auto py-1 px-6 rounded-3xl md:rounded-full my-4">
@@ -192,7 +191,7 @@ export default function Home() {
             <div className="w-full md:w-1/2">
               <h2 className="text-4xl text-sky-950 font-bold mb-6">Who are we?</h2>
               <p className="mb-4 text-sky-800">From travelers, for travelers. With more than 5 years of experience, we are experts in finding cheap flights, both domestic and international. Our offers are usually 30% to 50% cheaper than regular airline prices. If its not an amazing offer, we won&apos;t send it!.</p>
-              <Link href="/about"><Button variant="outline">About us</Button></Link>
+              <Button variant="outline"><a href="/about">About us</a></Button>
             </div>
           </div>
         </section>
@@ -209,7 +208,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold mb-6">What is our mission?</h2>
             <div>
               <p className="text-slate-200 mb-4">Our mission is to ensure that our customers never pay full price for an airline ticket again.</p>
-              <Button variant="cta"><Link href="/about">Click here</Link></Button>
+             <Button variant="cta"><a  href="/about">Click here</a></Button>
             </div>
           </div>
         </section>
@@ -219,7 +218,7 @@ export default function Home() {
             <div>
               <h2 className="text-4xl font-bold mb-6">FAQs</h2>
               <p className="mb-4">Have questions? Read.</p>
-              <Button>Contact</Button>
+              <Button><a href="/contact">Contact</a></Button>
             </div>
             <div className="mt-10 md:m-0">
               <Accordion

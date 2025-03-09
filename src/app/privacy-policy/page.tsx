@@ -1,6 +1,10 @@
 import Header from '../_components/Header'
 import Footer from '../_components/Footer'
 
+export const metadata = {
+  title: "FlyTop - Privacy Policy"
+}
+
 export default function PrivacyPolicy() {
   return (
     <>

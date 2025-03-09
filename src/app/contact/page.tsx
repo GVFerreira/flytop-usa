@@ -5,6 +5,10 @@ import Footer from "../_components/Footer"
 
 import NewsletterSection from "../_components/Newsletter-Section"
 
+export const metadata = {
+  title: "FlyTop - Contact"
+}
+
 export default function Contact() {
   return (
     <>

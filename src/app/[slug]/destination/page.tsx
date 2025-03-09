@@ -96,8 +96,15 @@ export default async function Destination({params}: Props) {
       )
     }
 
-    return <h1>Destination not found</h1>
-
+    return (
+      <>
+        <Header />
+        <main style={{flex: "1 1 0"}} className="flex flex-col justify-center items-center">
+          <h1 className="text-4xl leading-[3rem] text-sky-950 font-bold mb-6 text-center md:text-6xl md:leading-[4.3rem]">Destination not found</h1>
+        </main>
+        <Footer/>
+      </>
+    )
   } catch(e: any) {
     return <h1>{e}</h1>
   }

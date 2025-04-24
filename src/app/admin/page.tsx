@@ -1,10 +1,12 @@
 import { NewsletterTable } from "./_components/newsletter-table"
-import { getClient, getNewsletter } from "../actions"
+import { getClient, getLeads, getNewsletter } from "../actions"
 import { ClientTable } from "./_components/client-table"
+import { LeadsTable } from "./_components/leads-table"
 
 export default async function Admin() {
   const newsletter = await getNewsletter()
   const client = await getClient()
+  const leads = await getLeads()
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -13,6 +15,10 @@ export default async function Admin() {
         <p className="text-md md:text-lg">Informações sensíveis</p>
       </div>
       <div className="grid grid-cols-2 gap-20">
+        <div className="w-full">
+          <h3 className="font-semibold text-sm mb-2 md:text-md">Leads</h3>
+          <LeadsTable data={leads}/>
+        </div>
         <div className="w-full">
           <h3 className="font-semibold text-sm mb-2 md:text-md">Clientes</h3>
           <ClientTable data={client}/>

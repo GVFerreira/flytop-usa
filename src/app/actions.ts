@@ -100,3 +100,22 @@ export async function getClient() {
 
   return client
 }
+
+export async function getLeads() {
+  const leads = await prisma.leads.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    },
+    include: {
+      destination: {
+        select: {
+          slug: true,
+          name: true,
+          departureCity: true
+        }
+      }
+    }
+  })
+
+  return leads
+}

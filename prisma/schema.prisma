@@ -59,6 +59,7 @@ model Destination {
 
   company    Company               @relation(fields: [flightCompanyId], references: [id])
   categories DestinationCategory[]
+  leads      Leads[]
 
   @@map("destinations")
 }
@@ -124,4 +125,17 @@ model Client {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("clients")
+}
+
+model Leads {
+  id                    String @id @default(uuid())
+  name                  String
+  telephone             String
+  interestedDestination String
+
+  destination Destination @relation(fields: [interestedDestination], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("leads")
 }

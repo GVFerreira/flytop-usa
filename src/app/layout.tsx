@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Roboto } from "next/font/google"
 import Script from "next/script"
 
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
 
@@ -50,7 +50,7 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
           </iframe>
         </noscript>
         {children}
-        <Toaster />
+        <Toaster position="bottom-center" />
       </body>
       {/* <Script
         strategy="afterInteractive"

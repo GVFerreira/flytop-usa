@@ -35,6 +35,13 @@ export function LeadsTable({ data }: LeadTable) {
       cell: ({ row }) => <div className="text-center">{row.getValue('telephone')}</div>,
     },
     {
+      accessorKey: 'email',
+      header: ({ column }) => {
+        return ("E-mail")
+      },
+      cell: ({ row }) => <div className="text-center">{row.getValue('email')}</div>,
+    },
+    {
       accessorKey: 'destination', // opcional se você quiser filtros ou ordenações
       header: () => "Destino de interesse",
       cell: ({ row }) => (

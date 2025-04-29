@@ -6,13 +6,13 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Form,
   FormControl,
@@ -22,7 +22,7 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { toast } from "@/components/ui/use-toast"
+import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 
@@ -35,6 +35,9 @@ const FormSchema = z.object({
   }),
   telephone: z.string().regex(usPhoneRegex, {
     message: "Please enter a valid US phone number.",
+  }),
+  email: z.string().email({
+    message: 'Please enter a valid email'
   })
 })
 
@@ -49,6 +52,7 @@ export default function BuyNowDrawer() {
     defaultValues: {
       name: "",
       telephone: "",
+      email: "",
     },
   })
 
@@ -60,40 +64,35 @@ export default function BuyNowDrawer() {
         body: JSON.stringify({...data, destinationSlug: slug})
       })
 
-      const res = request.status
+      const status = request.status
       const message = `Hello, my name is ${data.name}. I am interested in an offer`
 
-      if(res === 201) {
-        toast({
-          title: `✅ Thank you ${data.name}!`,
+      if(status === 201) {
+        toast(`✅ Thank you ${data.name}!`, {
           description: (
-            <div>
+            <>
               <p>Your information has been received. Our team will be in touch with you shortly.</p>
               <br />
-              <Button variant="link" className="underline hover:no-underline">
-                <a href={`sms:+14165264491?body=${message}`}>Click here to send us a message directly</a>
+              <Button variant="link" className="underline hover:no-underline mx-auto">
+                <a href={`sms:+14165264491?body=${message}`}>Send us a message directly</a>
               </Button>
-            </div>
+            </>
           ),
           duration: 12 * 1000
         })
 
         setOpen(false)
       } else {
-        toast({
-          title: `❌ An error occurred`,
+        toast(`❌ An error occurred`, {
           description: "Sorry! Try again later.",
-          variant: "destructive"
         })
       }
 
       form.reset()
     } catch (e) {
       console.error(e)
-      toast({
-        title: `❌ An error occurred`,
+      toast(`❌ An error occurred`, {
         description: "Sorry! Try again later.",
-        variant: "destructive"
       })
     }
   }
@@ -107,19 +106,19 @@ export default function BuyNowDrawer() {
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger>
         <Button variant="cta" className="buy-button w-1/2 mt-6">
           BUY NOW
         </Button>
-      </DrawerTrigger>
-      <DrawerContent className="container max-w-2xl py-4">
-        <DrawerHeader>
-          <DrawerTitle>Please provide your information</DrawerTitle>
-          <DrawerDescription>
+      </DialogTrigger>
+      <DialogContent className="container max-w-2xl py-4">
+        <DialogHeader>
+          <DialogTitle>Please provide your information</DialogTitle>
+          <DialogDescription>
             To proceed with your purchase, kindly provide your full name and phone number. Our team will contact you
             shortly to complete the booking process.
-          </DrawerDescription>
+          </DialogDescription>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
               <FormField
@@ -129,7 +128,10 @@ export default function BuyNowDrawer() {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input
+                        {...field}
+                        placeholder="John Doe"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -159,13 +161,30 @@ export default function BuyNowDrawer() {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>E-mail address</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="john@doe.com"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <Button type="submit" variant="cta" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? "Submitting" : "Submit"}
               </Button>
             </form>
           </Form>
-        </DrawerHeader>
-      </DrawerContent>
-    </Drawer>
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   )
 }

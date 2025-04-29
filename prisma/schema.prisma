@@ -131,6 +131,7 @@ model Leads {
   id                    String @id @default(uuid())
   name                  String
   telephone             String
+  email                 String
   interestedDestination String
 
   destination Destination @relation(fields: [interestedDestination], references: [id])

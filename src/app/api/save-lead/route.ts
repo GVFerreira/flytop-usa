@@ -1,8 +1,15 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { prisma } from '@/services/database'
+import nodemailer from 'nodemailer'
+import transporter from '@/lib/nodemailer'
+
+interface CustomMailOptions extends nodemailer.SendMailOptions {
+  template?: string
+  context?: { [key: string]: any }
+}
 
 export async function POST(req: NextRequest) {
-  const { name, telephone, destinationSlug } = await req.json()
+  const { name, telephone, email, destinationSlug } = await req.json()
 
   if (!destinationSlug) {
     return NextResponse.json({ error: 'Slug is required' }, { status: 400 })
@@ -10,7 +17,11 @@ export async function POST(req: NextRequest) {
 
   const destination = await prisma.destination.findUnique({
     where: { slug: destinationSlug },
-    select: { id: true }
+    select: {
+      id: true,
+      name: true,
+      departureCity: true
+    }
   })
 
   if(!destination) {
@@ -21,9 +32,39 @@ export async function POST(req: NextRequest) {
     data: {
       name,
       telephone,
+      email,
       interestedDestination: destination.id
     }
   })
+
+  const mailOptions: CustomMailOptions = {
+    from: 'FlyTop Travels <contact@flytoptravels.com>',
+    to: email,
+    bcc: "contact@flytoptravels.com",
+    subject: `FLYTOP TRAVELS - Flight from ${destination.departureCity.toLocaleUpperCase()} to ${destination.name.toLocaleUpperCase()}`,
+    template: "lead",
+    context: {
+      name,
+      telephone,
+      email
+    }
+  }
+
+  try {
+    await transporter.sendMail(mailOptions)
+    console.log({
+      to: email,
+      message: `Email sent successfully! Template: LEAD`,
+      date: new Date().toLocaleString()
+    })
+  } catch (error) {
+    console.log(error)
+    console.log({
+      to: email,
+      message: `Error sending email! Template: LEAD`,
+      date: new Date().toLocaleString()
+    })
+  }
 
   return NextResponse.json(lead, { status: 201 })
 }

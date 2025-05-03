@@ -25,7 +25,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'flytop-travels-minio.qicnvt.easypanel.host',
+        hostname: 'flytop-minio.kqfzew.easypanel.host',
         port: '',
         pathname: '/**',
       },

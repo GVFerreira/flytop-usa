@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     from: 'FlyTop Travels <contact@flytoptravels.com>',
     to: email,
     bcc: "contact@flytoptravels.com",
-    subject: `FLYTOP TRAVELS - Flight from ${destination.departureCity.toLocaleUpperCase()} to ${destination.name.toLocaleUpperCase()}`,
+    subject: `FLYTOP TRAVELS - Flight from ${destination.departureCity.toUpperCase()} to ${destination.name.toUpperCase()}`,
     template: "lead",
     context: {
       name,
@@ -66,5 +66,5 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  return NextResponse.json(lead, { status: 201 })
+  return NextResponse.json({lead, destination}, { status: 201 })
 }

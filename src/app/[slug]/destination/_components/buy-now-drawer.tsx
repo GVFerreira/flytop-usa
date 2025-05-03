@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { usePathname } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { useState } from "react"
 import { z } from "zod"
 
 import {
@@ -24,7 +25,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
-import { useState } from "react"
 
 // Regex para validar telefone US
 const usPhoneRegex = /^(\+1\s?)?(\([0-9]{3}\)|[0-9]{3})[\s\-]?[0-9]{3}[\s\-]?[0-9]{4}$/
@@ -64,8 +64,10 @@ export default function BuyNowDrawer() {
         body: JSON.stringify({...data, destinationSlug: slug})
       })
 
+      const response = await request.json()
+
       const status = request.status
-      const message = `Hello, my name is ${data.name}. I am interested in an offer`
+      const message = `Hello, my name is ${data.name}. I am interested in an offer from ${response.destination.departureCity.toUpperCase()} to ${response.destination.name.toUpperCase()}`
 
       if(status === 201) {
         toast(`✅ Thank you ${data.name}!`, {
@@ -112,7 +114,7 @@ export default function BuyNowDrawer() {
           BUY NOW
         </Button>
       </DialogTrigger>
-      <DialogContent className="container max-w-2xl py-4">
+      <DialogContent className="container md:max-w-2xl max-w-sm">
         <DialogHeader>
           <DialogTitle>Please provide your information</DialogTitle>
           <DialogDescription>
@@ -125,7 +127,7 @@ export default function BuyNowDrawer() {
                 control={form.control}
                 name="name"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col items-start mt-2">
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
@@ -142,7 +144,7 @@ export default function BuyNowDrawer() {
                 control={form.control}
                 name="telephone"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col items-start mt-2">
                     <FormLabel>Phone number</FormLabel>
                     <FormControl>
                       <Input
@@ -165,7 +167,7 @@ export default function BuyNowDrawer() {
                 control={form.control}
                 name="email"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col items-start mt-2">
                     <FormLabel>E-mail address</FormLabel>
                     <FormControl>
                       <Input

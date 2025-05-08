@@ -76,7 +76,7 @@ export default function BuyNowDrawer() {
               <p>Your information has been received. Our team will be in touch with you shortly.</p>
               <br />
               <Button variant="link" className="underline hover:no-underline mx-auto">
-                <a href={`sms:+14165264491?body=${message}`}>Send us a message directly</a>
+                <a href={`sms:+19785747647?body=${message}`}>Send us a message directly</a>
               </Button>
             </>
           ),

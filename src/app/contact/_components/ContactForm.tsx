@@ -3,16 +3,19 @@
 import { User, Mail, Send } from "lucide-react"
 import { useForm } from "react-hook-form"
 
-import { sendMail } from "@/lib/mail"
-
 import { toast } from '@/components/ui/use-toast'
 
 export default function ContactForm() {
   const { register, handleSubmit, reset, formState } = useForm()
 
-  const handleSendMail = handleSubmit(async ({name, email, message}) => {
+  const handleSendMail = handleSubmit(async (data) => {
     try {
-      await sendMail({name, email, message})
+      await fetch('/api/contact-form', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      })
+
       toast({
         title: 'Success',
         description: 'Your message has sent successfully'
